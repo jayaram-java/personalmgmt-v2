@@ -12,13 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.company.Personalmgmt.dto.KeyNotesDto;
 import com.company.Personalmgmt.model.CheckListCategory;
 import com.company.Personalmgmt.model.ExpenseCategory;
 import com.company.Personalmgmt.model.KeyNotesCategory;
 import com.company.Personalmgmt.model.MonthMaster;
 import com.company.Personalmgmt.model.PropertyCategory;
 import com.company.Personalmgmt.model.QuotesDetail;
+import com.company.Personalmgmt.model.StatusMaster;
 import com.company.Personalmgmt.model.YearMaster;
 import com.company.Personalmgmt.repository.CheckListCategoryRepository;
 import com.company.Personalmgmt.repository.ExpenseCategoryRepository;
@@ -26,6 +26,7 @@ import com.company.Personalmgmt.repository.KeyNotesCategoryRepository;
 import com.company.Personalmgmt.repository.MonthMasterRepository;
 import com.company.Personalmgmt.repository.PropertyCategoryRepository;
 import com.company.Personalmgmt.repository.QuotesDetailRepository;
+import com.company.Personalmgmt.repository.StatusMasterRepository;
 import com.company.Personalmgmt.repository.UserRepository;
 import com.company.Personalmgmt.repository.YearMasterRepository;
 import com.company.Personalmgmt.serviceimpl.LoginServiceImpl;
@@ -58,6 +59,9 @@ public class NavigationController {
 	
 	@Autowired
 	KeyNotesCategoryRepository keyNotesCategoryRepository;
+	
+	@Autowired
+	StatusMasterRepository statusMasterRepository;
 	
 	@Autowired
 	UserRepository userRepository;
@@ -225,6 +229,7 @@ public class NavigationController {
 		
 		long userId = (Long) httpsession.getAttribute("userId");
 
+		List<StatusMaster> statusMaster = statusMasterRepository.findAll();
 
 		ModelAndView resulttologin = new ModelAndView("user/checkList");
 
@@ -233,6 +238,8 @@ public class NavigationController {
 		List<CheckListCategory> checkListCategory = checkListCategoryRepository.findByStatusAndUserId("active",userId);
 
 		result.addObject("checkListCategory", checkListCategory);
+		
+		result.addObject("statusMaster", statusMaster);
 
 		if (httpsession.getAttribute("username") == null) {
 

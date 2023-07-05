@@ -14,6 +14,7 @@ import com.company.Personalmgmt.dto.ExpenseCategoryDto;
 import com.company.Personalmgmt.model.ExpenseCategory;
 import com.company.Personalmgmt.model.Permission;
 import com.company.Personalmgmt.repository.ExpenseCategoryRepository;
+import com.company.Personalmgmt.repository.StatusMasterRepository;
 import com.company.Personalmgmt.service.ExpenseCategoryMasterService;
 
 @Controller
@@ -24,10 +25,9 @@ public class ExpenseCategoryMasterController {
 
 	@Autowired
 	ExpenseCategoryMasterService expenseCategoryMasterService;
-	
+
 	@Autowired
 	HttpSession httpsession;
-
 
 	@RequestMapping(value = "/saveexpensecategorydetails")
 	@ResponseBody
@@ -41,10 +41,10 @@ public class ExpenseCategoryMasterController {
 	@RequestMapping(value = "/getallexpensecategory")
 	@ResponseBody
 	public List<ExpenseCategory> getExpenseCategory() {
-		
+
 		long userId = (Long) httpsession.getAttribute("userId");
 
-		List<ExpenseCategory> expenseCategory = expenseCategoryRepository.findByPermissionIdOrUserId(1,userId);
+		List<ExpenseCategory> expenseCategory = expenseCategoryRepository.findByPermissionIdOrUserId(1, userId);
 
 		return expenseCategory;
 	}

@@ -45,12 +45,19 @@ public class CheckListDetails implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
+
 	@Column(name = "category")
 	private String category;
-	
+
 	@Column(name = "link")
 	private String link;
+
+	@ManyToOne
+	@JoinColumn(name = "status_id")
+	private StatusMaster statusMaster;
+
+	@Column(name = "completed_date")
+	private Date completedDate;
 
 	public Long getId() {
 		return id;
@@ -131,7 +138,21 @@ public class CheckListDetails implements Serializable {
 	public void setLink(String link) {
 		this.link = link;
 	}
-	
-	
+
+	public StatusMaster getStatusMaster() {
+		return statusMaster;
+	}
+
+	public void setStatusMaster(StatusMaster statusMaster) {
+		this.statusMaster = statusMaster;
+	}
+
+	public Date getCompletedDate() {
+		return completedDate;
+	}
+
+	public void setCompletedDate(Date completedDate) {
+		this.completedDate = completedDate;
+	}
 
 }

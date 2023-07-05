@@ -126,6 +126,7 @@ body {
 					<th>checklist-id</th>
 					<th>Name</th>
 					<th>Parent</th>
+					<th>Status</th>
 					<th>Created Date</th>
 					<th>Edit</th>
 				</tr>
@@ -159,12 +160,12 @@ body {
 				<hr>
 				<div class="row">
 					<div class="column">
-						<label for="startdate"><b>Name *</b></label> <input type="text"
+						<label for="startdate"style="float: left;"><b>Name *</b></label> <input type="text"
 							placeholder="Enter requirement" name="checklistname"
 							id="checklistname" required>
 					</div>
 					<div class="column">
-						<label for="parent"><b>Parent *</b></label><br> <br> <select
+						<label for="parent"style="float: left;"><b>Parent *</b></label><br> <br> <select
 							name="parent" id="parent">
 							<option value="">Select</option>
 							<c:forEach items="${checkListCategory}" var="checkListCategory">
@@ -173,6 +174,26 @@ body {
 							</c:forEach>
 						</select>
 					</div>
+				</div>
+				
+				<div class="row">
+					<div class="column">
+						<label class="required-field" for="date" style="float: left;"><b> Date </b></label><br> <input
+							type="date" id="completedDate" name="completedDate" style="float: left;width: 180px;margin: 6px;height: 46px;align: left;">
+					</div>
+					
+						<div class="column">
+						<label for="status"style="float: left;"><b>Status *</b></label><br> <br> <select
+							name="status" id="status">
+							<option value="">Select</option>
+							<c:forEach items="${statusMaster}" var="statusMaster">
+								<option value="${statusMaster.name}"
+									${statusMaster == name ? 'selected' : ''}>${statusMaster.name}</option>
+							</c:forEach>
+						</select>
+					</div>
+
+
 				</div>
 
 				<div align="left">

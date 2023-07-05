@@ -91,8 +91,12 @@ var x, i, j, l, g, selElmnt, a, b, c;
 		var id = $("#checklistid").val();
 		var name = $("#checklistname").val();
 		var parent = $("#parent").val();
+		
+		var completedDate = $("#completedDate").val();
+		
+		var status = $("#status").val();
 
-		if(name != "" && name != null && parent != "" && parent != null ){
+		if(name != "" && name != null && parent != "" && parent != null && status != null){
 			
 			debugger
 			
@@ -100,6 +104,8 @@ var x, i, j, l, g, selElmnt, a, b, c;
 					"id":id,
 					"name" : name,
 					"parent" : parent,
+					"completedDate":completedDate,
+					"status" : status
 			}
 
 			$.ajax({
@@ -229,6 +235,7 @@ function checkListDataTable(){
 	        {"data": "serialId"},
 	        {"data": "name"},
 	        {"data": "parent"},
+	        {"data": "status"},
 	        {"data": "createdDate"},
 	        {
                 'mRender': function (data, type, row,meta) {
@@ -257,6 +264,10 @@ function getbyID(id){
 		success : function(data) {
 			$("#checklistname").val(data.name);
 			$("#parent").val(data.parent);
+			
+			$("#status").val(data.status);
+			$("#completedDate").val(data.completedDate);
+			
 			$("#savechecklist").val("Update");
 
 			$( "#myForm" ).show();

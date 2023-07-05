@@ -1684,7 +1684,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 		LocalDateTime startTime = LocalDateTime.now();
 
 		long userId = 1;
-		Optional<User> user = Optional.of(userRepository.findById(userId).orElseThrow(() ->  new NoDataFoundException()));
+		Optional<User> user = Optional.of(userRepository.findById(userId).orElseThrow(() ->  new NoDataFoundException("Data not found")));
 
 		try {
 			

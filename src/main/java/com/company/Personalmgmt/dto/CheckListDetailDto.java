@@ -19,6 +19,10 @@ public class CheckListDetailDto {
 	private Date modifiedDate;
 
 	private String modifiedBy;
+	
+	private String status;
+	
+	private Date completedDate;
 
 	public Long getId() {
 		return id;
@@ -83,5 +87,29 @@ public class CheckListDetailDto {
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Date getCompletedDate() {
+		return completedDate;
+	}
+
+	public void setCompletedDate(Date completedDate) {
+		this.completedDate = completedDate;
+	}
+
+	@Override
+	public String toString() {
+		return "CheckListDetailDto [id=" + id + ", name=" + name + ", parent=" + parent + ", serialId=" + serialId
+				+ ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", modifiedDate=" + modifiedDate
+				+ ", modifiedBy=" + modifiedBy + ", status=" + status + ", completedDate=" + completedDate + "]";
+	}
+	
 
 }

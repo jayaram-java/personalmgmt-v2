@@ -216,7 +216,7 @@ public class ExpenseController {
 	public List<ExpenseDetails> getExpenseDetailswithPriceBetween(String year, String category, Integer minPrice,Integer maxPrice) {
 		
 		if(category.isEmpty()) {
-			throw new NoDataFoundException();
+			throw new NoDataFoundException("Data not found");
 		}
 
 		List<ExpenseDetails> expenseDetails = expenseService.getExpenseDetailswithPriceRangeBetween(year, category, minPrice, maxPrice);

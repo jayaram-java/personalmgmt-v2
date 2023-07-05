@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,11 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.company.Personalmgmt.dto.CheckListCategoryDto;
 import com.company.Personalmgmt.dto.CheckListDetailDto;
+import com.company.Personalmgmt.exception.NoDataFoundException;
 import com.company.Personalmgmt.model.CheckListCategory;
 import com.company.Personalmgmt.model.CheckListDetails;
+import com.company.Personalmgmt.model.StatusMaster;
 import com.company.Personalmgmt.model.User;
 import com.company.Personalmgmt.repository.CheckListCategoryRepository;
 import com.company.Personalmgmt.repository.CheckListDetailsRepository;
+import com.company.Personalmgmt.repository.StatusMasterRepository;
 import com.company.Personalmgmt.repository.UserRepository;
 import com.company.Personalmgmt.service.CheckListService;
 
@@ -38,6 +40,9 @@ public class CheckListServiceImpl implements CheckListService {
 	
 	@Autowired
 	CheckListDetailsRepository checkListDetailsRepository;
+	
+	@Autowired
+	StatusMasterRepository statusMasterRepository;
 	
 	@Autowired
 	UserRepository userRepository;
@@ -94,6 +99,8 @@ public class CheckListServiceImpl implements CheckListService {
 
 		try {
 			Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(df.format(date));
+			
+			StatusMaster statusmaster =  statusMasterRepository.findByName(checkListDetailDto.getStatus()).orElseThrow(() -> new NoDataFoundException("Status not found"));
 
 			if (checkListDetailDto.getId() == null) {
 
@@ -107,6 +114,8 @@ public class CheckListServiceImpl implements CheckListService {
 				checkListDetails.setCreatedBy((String) httpsession.getAttribute("username"));
 				checkListDetails.setCreatedDate(date1);
 				checkListDetails.setUser(user.get());
+				checkListDetails.setCompletedDate(checkListDetailDto.getCompletedDate());
+				checkListDetails.setStatusMaster(statusmaster);
 
 				checkListDetailsRepository.save(checkListDetails);
 
@@ -123,6 +132,8 @@ public class CheckListServiceImpl implements CheckListService {
 				checkListDetails.setModifiedBy((String) httpsession.getAttribute("username"));
 				checkListDetails.setModifiedDate(date1);
 				checkListDetails.setUser(user.get());
+				checkListDetails.setCompletedDate(checkListDetailDto.getCompletedDate());
+				checkListDetails.setStatusMaster(statusmaster);
 
 				checkListDetailsRepository.save(checkListDetails);
 
@@ -149,6 +160,8 @@ public class CheckListServiceImpl implements CheckListService {
 
 			checkListDetailDto.setName(checkListDetails.getName());
 			checkListDetailDto.setParent(checkListDetails.getCheckListCategory().getName());
+			checkListDetailDto.setStatus(checkListDetails.getStatusMaster().getName());
+			checkListDetailDto.setCompletedDate(checkListDetails.getCompletedDate());
 
 		} catch (Exception e) {
 
@@ -186,6 +199,8 @@ public class CheckListServiceImpl implements CheckListService {
 				checkListDetailDto.setId(checkListDetail.getId());
 				checkListDetailDto.setName(checkListDetail.getName());
 				checkListDetailDto.setParent(checkListDetail.getCheckListCategory().getName());
+				checkListDetailDto.setStatus(checkListDetail.getStatusMaster().getName());
+				checkListDetailDto.setCompletedDate(checkListDetail.getCompletedDate());
 
 				DateFormat df = new SimpleDateFormat("dd/MMMM/yyyy");
 
@@ -233,6 +248,8 @@ public class CheckListServiceImpl implements CheckListService {
 				checkListDetailDto.setId(checkListDetail.getId());
 				checkListDetailDto.setName(checkListDetail.getName());
 				checkListDetailDto.setParent(checkListDetail.getCheckListCategory().getName());
+				checkListDetailDto.setStatus(checkListDetail.getStatusMaster().getName());
+				checkListDetailDto.setCompletedDate(checkListDetail.getCompletedDate());
 
 				DateFormat df = new SimpleDateFormat("dd/MMMM/yyyy");
 

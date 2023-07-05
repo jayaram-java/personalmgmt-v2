@@ -2,9 +2,9 @@ package com.company.Personalmgmt.exception;
 
 public class NoDataFoundException extends RuntimeException {
 	
-	 public NoDataFoundException() {
+	 public NoDataFoundException(String msg) {
 
-	        super("No data found");
+	        super(msg);
 	    }
 
 }
