@@ -25,12 +25,24 @@ public class PersonalInfoDto {
 	private String webLink;
 
 	private String designation;
-	
+
 	private String bloodGroup;
-	
+
 	private String passportNumber;
-	
+
 	private String uan;
+
+	private String primaryMobileNumber;
+
+	private String currentAddress;
+
+	private String bankAccountNumber;
+
+	private String ifsc;
+
+	private String primaryEmailId;
+
+	private String secondaryEmailId;
 
 	@Override
 	public String toString() {
@@ -159,6 +171,54 @@ public class PersonalInfoDto {
 
 	public void setDesignation(String designation) {
 		this.designation = designation;
+	}
+
+	public String getPrimaryMobileNumber() {
+		return primaryMobileNumber;
+	}
+
+	public void setPrimaryMobileNumber(String primaryMobileNumber) {
+		this.primaryMobileNumber = primaryMobileNumber;
+	}
+
+	public String getCurrentAddress() {
+		return currentAddress;
+	}
+
+	public void setCurrentAddress(String currentAddress) {
+		this.currentAddress = currentAddress;
+	}
+
+	public String getBankAccountNumber() {
+		return bankAccountNumber;
+	}
+
+	public void setBankAccountNumber(String bankAccountNumber) {
+		this.bankAccountNumber = bankAccountNumber;
+	}
+
+	public String getIfsc() {
+		return ifsc;
+	}
+
+	public void setIfsc(String ifsc) {
+		this.ifsc = ifsc;
+	}
+
+	public String getPrimaryEmailId() {
+		return primaryEmailId;
+	}
+
+	public void setPrimaryEmailId(String primaryEmailId) {
+		this.primaryEmailId = primaryEmailId;
+	}
+
+	public String getSecondaryEmailId() {
+		return secondaryEmailId;
+	}
+
+	public void setSecondaryEmailId(String secondaryEmailId) {
+		this.secondaryEmailId = secondaryEmailId;
 	}
 
 }

@@ -40,6 +40,12 @@ public class EmployeeTaskDetail {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@Column(name = "office")
+	private String office;
+
+	@Column(name = "status_flag")
+	private String statusFlag;
+
 	public long getId() {
 		return id;
 	}
@@ -102,6 +108,22 @@ public class EmployeeTaskDetail {
 
 	public void setTaskCategory(String taskCategory) {
 		this.taskCategory = taskCategory;
+	}
+
+	public String getOffice() {
+		return office;
+	}
+
+	public void setOffice(String office) {
+		this.office = office;
+	}
+
+	public String getStatusFlag() {
+		return statusFlag;
+	}
+
+	public void setStatusFlag(String statusFlag) {
+		this.statusFlag = statusFlag;
 	}
 
 }

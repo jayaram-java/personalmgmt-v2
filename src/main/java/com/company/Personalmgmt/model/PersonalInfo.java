@@ -60,8 +60,26 @@ public class PersonalInfo implements Serializable {
 	@Column(name = "passport_number")
 	private String passportNumber;
 
+	@Column(name = "bank_account_number")
+	private String bankAccountNumber;
+
+	@Column(name = "ifsc")
+	private String ifsc;
+
 	@Column(name = "Uan")
 	private String uan;
+
+	@Column(name = "primary_phone_number")
+	private String primaryMobileNumber;
+
+	@Column(name = "current_address")
+	private String currentAddress;
+
+	@Column(name = "primary_email_id")
+	private String primaryEmailId;
+
+	@Column(name = "secondary_email_id")
+	private String secondaryEmailId;
 
 	public Long getId() {
 		return id;
@@ -174,5 +192,55 @@ public class PersonalInfo implements Serializable {
 	public void setUan(String uan) {
 		this.uan = uan;
 	}
+
+	public String getPrimaryMobileNumber() {
+		return primaryMobileNumber;
+	}
+
+	public void setPrimaryMobileNumber(String primaryMobileNumber) {
+		this.primaryMobileNumber = primaryMobileNumber;
+	}
+
+	public String getCurrentAddress() {
+		return currentAddress;
+	}
+
+	public void setCurrentAddress(String currentAddress) {
+		this.currentAddress = currentAddress;
+	}
+
+	public String getBankAccountNumber() {
+		return bankAccountNumber;
+	}
+
+	public void setBankAccountNumber(String bankAccountNumber) {
+		this.bankAccountNumber = bankAccountNumber;
+	}
+
+	public String getIfsc() {
+		return ifsc;
+	}
+
+	public void setIfsc(String ifsc) {
+		this.ifsc = ifsc;
+	}
+
+	public String getPrimaryEmailId() {
+		return primaryEmailId;
+	}
+
+	public void setPrimaryEmailId(String primaryEmailId) {
+		this.primaryEmailId = primaryEmailId;
+	}
+
+	public String getSecondaryEmailId() {
+		return secondaryEmailId;
+	}
+
+	public void setSecondaryEmailId(String secondaryEmailId) {
+		this.secondaryEmailId = secondaryEmailId;
+	}
+	
+	
 
 }
