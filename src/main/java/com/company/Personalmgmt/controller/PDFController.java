@@ -81,5 +81,63 @@ public class PDFController {
 
 		}
 	}
+	
+	@RequestMapping(value = "/agenda")
+	public void agendainfo(HttpServletResponse response) throws DocumentException, IOException {
+		
+		response.setHeader("Expires", "0");
+		response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+		response.setHeader("Pragma", "public");
+		response.setContentType("application/pdf");
+
+		HttpHeaders headers = new HttpHeaders();
+
+		Document document = new Document();
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		PdfWriter.getInstance(document, out);
+
+		AgendaPDFGenerator agendaPDFGenerator = new AgendaPDFGenerator();
+
+		document.open();
+
+		document.addTitle("Daily Agenda");
+
+		document.addSubject("Java");
+
+		document.addAuthor("Jayaram");
+
+		Paragraph ob = agendaPDFGenerator.addTitlePage();
+
+		PdfPTable content = agendaPDFGenerator.headertwo();
+		
+		PdfPTable content2 = agendaPDFGenerator.headerthree();
+		
+		PdfPTable content3 = agendaPDFGenerator.headerFour();
+		
+		PdfPTable content4 = agendaPDFGenerator.headerFive();
+
+		document.add(ob);
+		document.add(content);
+		document.add(content4);
+		document.add(content2);
+		document.add(content3);
+		
+	
+		document.close();
+
+		try {
+			headers.setContentLength(out.size());
+			OutputStream os = response.getOutputStream();
+			out.writeTo(os);
+			os.flush();
+			os.close();
+
+		} catch (Exception e) {
+
+		}
+	}
+
 
 }

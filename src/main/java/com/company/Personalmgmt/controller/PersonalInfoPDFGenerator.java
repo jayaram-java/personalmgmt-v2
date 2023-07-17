@@ -299,6 +299,70 @@ public class PersonalInfoPDFGenerator {
 				
 			}
 			
+			
+			cell = new PdfPCell(new Phrase("##########",
+					FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
+			cell.setBorderColor(BaseColor.LIGHT_GRAY);
+			cell.setPadding(5);
+			table.addCell(cell);
+			
+
+			cell = new PdfPCell(new Phrase("##########----------------------------------------------->",
+					FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
+			cell.setBorderColor(BaseColor.LIGHT_GRAY);
+			cell.setPadding(5);
+			table.addCell(cell);
+			
+			
+				cell = new PdfPCell(new Phrase("Employee ID",
+						FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
+				cell.setBorderColor(BaseColor.LIGHT_GRAY);
+				cell.setPadding(5);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("ACE11267",
+						FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
+				cell.setBorderColor(BaseColor.LIGHT_GRAY);
+				cell.setPadding(5);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase("Login ID",
+						FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
+				cell.setBorderColor(BaseColor.LIGHT_GRAY);
+				cell.setPadding(5);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("Jayaram Pandiajothi|66557248",
+						FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
+				cell.setBorderColor(BaseColor.LIGHT_GRAY);
+				cell.setPadding(5);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase("Designation",
+						FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
+				cell.setBorderColor(BaseColor.LIGHT_GRAY);
+				cell.setPadding(5);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("Sr. Engineer | Development | Java | B2",
+						FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
+				cell.setBorderColor(BaseColor.LIGHT_GRAY);
+				cell.setPadding(5);
+				table.addCell(cell);
+		
+				cell = new PdfPCell(new Phrase("Office Email(Outlook)",
+						FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
+				cell.setBorderColor(BaseColor.LIGHT_GRAY);
+				cell.setPadding(5);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("jayaram.pandiajothi@aspiresys.com",
+						FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
+				cell.setBorderColor(BaseColor.LIGHT_GRAY);
+				cell.setPadding(5);
+				table.addCell(cell);
+			
+			
 			cell = new PdfPCell(new Phrase("##########",
 					FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
 			cell.setBorderColor(BaseColor.LIGHT_GRAY);
@@ -312,7 +376,7 @@ public class PersonalInfoPDFGenerator {
 			table.addCell(cell);
 			
 			if(personalInfoDto.getCurrentAddress() != null) {
-				cell = new PdfPCell(new Phrase("Present Address",
+				cell = new PdfPCell(new Phrase("Home Address",
 						FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
 				cell.setBorderColor(BaseColor.LIGHT_GRAY);
 				cell.setPadding(5);
@@ -325,6 +389,18 @@ public class PersonalInfoPDFGenerator {
 				table.addCell(cell);
 				
 			}
+			
+			cell = new PdfPCell(new Phrase("Present Address",
+					FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
+			cell.setBorderColor(BaseColor.LIGHT_GRAY);
+			cell.setPadding(5);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase( "Shree PG - 2/305,Sardar Patel Road, Navalur,Kelambakkam , Tamil Nadu - 603103",
+					FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
+			cell.setBorderColor(BaseColor.LIGHT_GRAY);
+			cell.setPadding(5);
+			table.addCell(cell);
 			
 		
 		
