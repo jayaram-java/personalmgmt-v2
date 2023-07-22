@@ -1,6 +1,8 @@
 package com.company.Personalmgmt.controller;
 
-import com.company.Personalmgmt.dto.PersonalInfoDto;
+import java.util.List;
+
+import com.company.Personalmgmt.model.TimeSheetDetails;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -105,7 +107,7 @@ public class AgendaPDFGenerator {
 
 	}
 	
-public PdfPTable headerFive() throws DocumentException {
+public PdfPTable headerFive(List<TimeSheetDetails> timeSheetDetails) throws DocumentException {
 		
 		Paragraph preface = new Paragraph();
 		
@@ -123,62 +125,62 @@ public PdfPTable headerFive() throws DocumentException {
 
 		PdfPCell cell = new PdfPCell();
 		
-		cell = new PdfPCell(new Phrase("Meet jo,ISMS,Software install,Project|vijay|patch",
+		cell = new PdfPCell(new Phrase(timeSheetDetails.get(0).getTask(),
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
 		table.addCell(cell);
 
-		cell = new PdfPCell(new Phrase("Monday",
+		cell = new PdfPCell(new Phrase(timeSheetDetails.get(0).getWeekDays(),
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
 		table.addCell(cell);
 		
 		
-		cell = new PdfPCell(new Phrase(" --- , ISMS,Toastmasters meeting",
+		cell = new PdfPCell(new Phrase(timeSheetDetails.get(1).getTask(),
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
 		table.addCell(cell);
 
-		cell = new PdfPCell(new Phrase("Tuesday",
+		cell = new PdfPCell(new Phrase(timeSheetDetails.get(1).getWeekDays(),
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
 		table.addCell(cell);
 		
-		cell = new PdfPCell(new Phrase("ICICI - salary account open | kirthiga",
+		cell = new PdfPCell(new Phrase(timeSheetDetails.get(2).getTask(),
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
 		table.addCell(cell);
 
-		cell = new PdfPCell(new Phrase("Wednesday",
+		cell = new PdfPCell(new Phrase(timeSheetDetails.get(2).getWeekDays(),
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
 		table.addCell(cell);
 		
-		cell = new PdfPCell(new Phrase(" Toastmasters meeting ",
+		cell = new PdfPCell(new Phrase(timeSheetDetails.get(3).getTask(),
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
 		table.addCell(cell);
 
-		cell = new PdfPCell(new Phrase("Thursday",
+		cell = new PdfPCell(new Phrase(timeSheetDetails.get(3).getWeekDays(),
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
 		table.addCell(cell);
 		
-		cell = new PdfPCell(new Phrase(" --- ",
+		cell = new PdfPCell(new Phrase(timeSheetDetails.get(4).getTask(),
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
 		table.addCell(cell);
 
-		cell = new PdfPCell(new Phrase("Friday",
+		cell = new PdfPCell(new Phrase(timeSheetDetails.get(4).getWeekDays(),
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
@@ -268,7 +270,7 @@ public PdfPTable headerthree() throws DocumentException {
 
 		PdfPCell cell = new PdfPCell();
 		
-		cell = new PdfPCell(new Phrase(" --- ",
+		cell = new PdfPCell(new Phrase("Leomilton Jesu",
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
@@ -281,7 +283,7 @@ public PdfPTable headerthree() throws DocumentException {
 		table.addCell(cell);
 		
 		
-		cell = new PdfPCell(new Phrase(" --- ",
+		cell = new PdfPCell(new Phrase("Leomilton Jesu | Ashokkumar Pandy",
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);
@@ -336,6 +338,18 @@ public PdfPTable headerthree() throws DocumentException {
 		table.addCell(cell);
 
 		cell = new PdfPCell(new Phrase("HR Recruiter",
+				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
+		cell.setBorderColor(BaseColor.LIGHT_GRAY);
+		cell.setPadding(5);
+		table.addCell(cell);
+		
+		cell = new PdfPCell(new Phrase("Gowri Shankar Subramanian",
+				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD)));
+		cell.setBorderColor(BaseColor.LIGHT_GRAY);
+		cell.setPadding(5);
+		table.addCell(cell);
+
+		cell = new PdfPCell(new Phrase("CEO",
 				FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL)));
 		cell.setBorderColor(BaseColor.LIGHT_GRAY);
 		cell.setPadding(5);

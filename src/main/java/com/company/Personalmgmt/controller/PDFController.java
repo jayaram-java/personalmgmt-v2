@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.Personalmgmt.dto.PersonalInfoDto;
+import com.company.Personalmgmt.model.TimeSheetDetails;
+import com.company.Personalmgmt.repository.TimeSheetDetailsRepository;
 import com.company.Personalmgmt.service.PersonalInfoService;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -26,6 +28,9 @@ public class PDFController {
 	
 	@Autowired
 	PersonalInfoService personalInfoService;
+	
+	@Autowired
+	TimeSheetDetailsRepository timeSheetDetailsRepository;
 	
 	@RequestMapping(value = "/personalInfo")
 	public void personalInfo(HttpServletResponse response) throws DocumentException, IOException {
@@ -99,6 +104,8 @@ public class PDFController {
 		PdfWriter.getInstance(document, out);
 
 		AgendaPDFGenerator agendaPDFGenerator = new AgendaPDFGenerator();
+		
+		List<TimeSheetDetails> timeSheetDetails = timeSheetDetailsRepository.findAll();
 
 		document.open();
 
@@ -116,7 +123,7 @@ public class PDFController {
 		
 		PdfPTable content3 = agendaPDFGenerator.headerFour();
 		
-		PdfPTable content4 = agendaPDFGenerator.headerFive();
+		PdfPTable content4 = agendaPDFGenerator.headerFive(timeSheetDetails);
 
 		document.add(ob);
 		document.add(content);
