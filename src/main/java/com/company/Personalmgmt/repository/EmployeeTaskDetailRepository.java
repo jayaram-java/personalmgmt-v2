@@ -13,5 +13,7 @@ public interface EmployeeTaskDetailRepository extends JpaRepository<EmployeeTask
 	EmployeeTaskDetail findById(long id);
 
 	List<EmployeeTaskDetail> findByOrderByIdDesc();
+	
+	List<EmployeeTaskDetail> findByOfficeOrderByIdDesc(String office);
 
 }

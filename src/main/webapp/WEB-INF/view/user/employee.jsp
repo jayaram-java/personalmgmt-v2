@@ -100,6 +100,20 @@ body {
  if((String)session.getAttribute("active") == "employee"){
 	 
 	 %>
+	 
+	 <div style="float: left;">
+	 &nbsp;
+	 	<div class='inline'>
+		&nbsp; <select id="project" style="width: 150px; height: 30px;">
+			<option value="">select project</option>
+			<option value="Velsure">Velsure-ERP</option>
+			<option value="Splenta Systems">Splenta-Fedmobile</option>
+			<option value="Aspire Systems">Aspire</option>
+			
+		</select>
+	</div>
+	 
+	 </div>
 
 	<div align="right">
 

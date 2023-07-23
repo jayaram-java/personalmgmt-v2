@@ -149,7 +149,9 @@ body {
 <label for="avg"><b>Avg based on current month :</b></label> 
 	
 	
-		<input type="text"  name="averageExpense" id="averageExpense" style="width: 120px; background-color: lightcoral; font-weight: bold;" disabled> </div>
+		<input type="text"  name="averageExpense" id="averageExpense" style="width: 120px; background-color: lightcoral; font-weight: bold;" disabled> 
+		
+</div>
 
 
 

@@ -13,5 +13,7 @@ public interface EmployeeService {
 	EmployeeDto getEmployeeTaskFromid(Long id);
 
 	boolean deleteEmployeeTaskFromid(Long id);
+	
+	List<EmployeeDto> getTaskDetailsBasedonProject(String project);
 
 }

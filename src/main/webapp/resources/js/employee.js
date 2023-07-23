@@ -105,9 +105,15 @@ $('#saveemployeetask').click(function() {
 
 	});
 	
+	$('#project').change(function() {
 	
+		var projectname = $("#project").val();
+		
+		jQuery("#employeetasktable").DataTable().clear();
+		jQuery("#employeetasktable").DataTable().ajax.url("taskdetailsBasedonProject?project="+projectname).load();
+
 	
-	
+	});
 	
 });
 

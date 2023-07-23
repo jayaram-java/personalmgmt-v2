@@ -20,18 +20,17 @@ import com.company.Personalmgmt.service.EmployeeService;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-	
-	 private static final org.slf4j.Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
-	
+
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
+
 	@Autowired
 	EmployeeTaskDetailRepository employeeTaskDetailRepository;
-	
+
 	@Autowired
 	HttpSession httpsession;
-	
+
 	@Autowired
 	UserRepository userRepository;
-
 
 	public List<EmployeeDto> getAllEmployeeTask() {
 
@@ -39,7 +38,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Long employeeid = (Long) httpsession.getAttribute("tasklist");
 
-		List<EmployeeTaskDetail> employeeTaskDetails = employeeTaskDetailRepository.findByOrderByIdDesc();
+		List<EmployeeTaskDetail> employeeTaskDetails = employeeTaskDetailRepository
+				.findByOfficeOrderByIdDesc("Aspire Systems");
 
 		List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
 
@@ -113,6 +113,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				employeeTaskDetail.setEndDate(employeeDto.getEndDate());
 				employeeTaskDetail.setStatus(employeeDto.getStatus());
 				employeeTaskDetail.setTaskCategory(employeeDto.getTaskCategory());
+				employeeTaskDetail.setOffice("Aspire Systems");
 
 				Optional<User> user = userRepository.findById((long) employeeid);
 
@@ -189,6 +190,37 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return false;
+	}
+
+	@Override
+	public List<EmployeeDto> getTaskDetailsBasedonProject(String project) {
+
+		log.info("API name = *getTaskDetailsBasedonProject");
+
+		List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
+
+		try {
+
+			List<EmployeeTaskDetail> employeeTaskDetails = employeeTaskDetailRepository
+					.findByOfficeOrderByIdDesc(project);
+			
+			employeeTaskDetails.stream().forEach(employeeTaskDetail ->{
+				
+				EmployeeDto employeeDto = new EmployeeDto();
+				
+				BeanUtils.copyProperties(employeeTaskDetail, employeeDto);
+				
+				employeeDtos.add(employeeDto);
+				
+			});
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("Exception " + e);
+		}
+
+		return employeeDtos;
 	}
 
 }
