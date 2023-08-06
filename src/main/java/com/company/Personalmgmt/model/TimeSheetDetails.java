@@ -21,7 +21,7 @@ public class TimeSheetDetails implements Serializable {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "week_days")
+	@Column(name = "week_days",unique = true)
 	private String weekDays;
 
 	@Column(name = "task")
@@ -38,6 +38,13 @@ public class TimeSheetDetails implements Serializable {
 
 	@Column(name = "modified_date")
 	private Date modifiedDate;
+
+	@Override
+	public String toString() {
+		return "TimeSheetDetails [id=" + id + ", weekDays=" + weekDays + ", task=" + task + ", createdBy=" + createdBy
+				+ ", createdDate=" + createdDate + ", modifiedBy=" + modifiedBy + ", modifiedDate=" + modifiedDate
+				+ "]";
+	}
 
 	public Long getId() {
 		return id;

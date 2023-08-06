@@ -9,8 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "user")
@@ -23,10 +26,11 @@ public class User implements Serializable {
 	@Column(name = "id")
 	private long id;
 
-	@Column(name = "user_name")
+	@Column(name = "user_name",unique=true)
 	private String username;
 
 	@Column(name = "password")
+	@JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
 	private String password;
 
 	@Column(name = "employee_name")
@@ -40,6 +44,7 @@ public class User implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "role_id")
+	//@JoinTable(name="user_role",joinColumns = @JoinColumn(name="id"),inverseJoinColumns = @JoinColumn(name="role_id"))
 	private Role role;
 
 	@Column(name = "created_by")

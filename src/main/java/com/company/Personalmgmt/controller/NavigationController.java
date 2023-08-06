@@ -554,6 +554,19 @@ public class NavigationController {
 		return result;
 	}
 	
+	@RequestMapping(value = { "/timesheet" })
+	public ModelAndView timesheet() {
+		
+		ModelAndView result = new ModelAndView("user/timeSheet");
+
+		if (httpsession.getAttribute("username") == null) {
+
+			return new ModelAndView("employeeLogin");
+		}
+
+		return result;
+	}
+	
 	@RequestMapping(value = { "/expenseReportPagination" })
 	public String expenseReportPagination() {
 
