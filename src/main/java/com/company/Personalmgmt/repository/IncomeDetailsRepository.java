@@ -15,7 +15,7 @@ public interface IncomeDetailsRepository extends JpaRepository<IncomeDetails, Lo
 	@Query(nativeQuery = true, value = "CALL expense_trans(:month,:year)")
 	List<Object[]> getBalanceSheetDetails(@Param("month") String month, @Param("year") String year);
 
-	@Query(nativeQuery = true, value = "SELECT i.n , i.month , i.amount FROM income_details AS i WHERE YEAR = :curyear")
+	@Query(nativeQuery = true, value = "SELECT i.n , i.month , sum(i.amount) FROM income_details AS i WHERE YEAR = :curyear GROUP BY i.n ")
 	List<Object[]> getincomedetails(@Param("curyear") int curyear);
 
 }
