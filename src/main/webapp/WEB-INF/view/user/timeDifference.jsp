@@ -171,7 +171,9 @@ body {
 			<input class="text-box" type="text"  placeholder="Select Time Zone" readonly>
 			<div class="options">
 			<div  onclick="show('America/New_York')">America/New_York</div>
+			<div  onclick="show('America/Toronto')">America/canada</div>
 				<div onclick="show('Asia/Shanghai')">Asia/Shanghai</div>
+				<div onclick="show('Asia/Bahrain')">Asia/Bahrain</div>
 				<div onclick="show('Europe/London')">Europe/London</div>
 				<div onclick="show('Europe/Moscow')">Europe/Moscow</div>
 			</div>

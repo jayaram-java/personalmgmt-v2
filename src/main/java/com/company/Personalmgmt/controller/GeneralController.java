@@ -14,6 +14,13 @@ import com.company.Personalmgmt.dto.GeneralDto;
 import com.company.Personalmgmt.dto.MoveForwardDto;
 import com.company.Personalmgmt.service.GeneralService;
 
+
+/**
+ * @author Jayaram
+ *
+ * ${tags} To improve the code standard
+ */
+
 @Controller
 public class GeneralController {
 

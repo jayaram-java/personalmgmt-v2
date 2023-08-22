@@ -10,6 +10,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -204,12 +205,12 @@ public class GeneralServiceImpl implements GeneralService {
 			LocalDate date2 = zdt2.toLocalDate();
 			Period diff1 = Period.between(date1, date2);
 			
-		//	 LocalDate date5 = LocalDate.parse(ds, dtf);
-		//	 LocalDate date6 = LocalDate.parse(de, dtf);
+			 LocalDate date5 = LocalDate.parse(ds, dtf);
+			 LocalDate date6 = LocalDate.parse(de, dtf);
 			
-		//	long daysBetween = Duration.between(date5, date6).toDays();
+			long daysBetween = ChronoUnit.DAYS.between(date5, date6);
 			
-		//	System.out.println("Days between = "+ daysBetween);
+			
 			
 			int month = diff1.getMonths();
 			int days = diff1.getDays();
@@ -227,7 +228,7 @@ public class GeneralServiceImpl implements GeneralService {
 			}
 
 			response.put("DiffDate", result);
-			response.put("DiffDays", String.valueOf(days));
+			response.put("DiffDays", String.valueOf(daysBetween));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -236,7 +237,7 @@ public class GeneralServiceImpl implements GeneralService {
 		}finally {
 			LocalDateTime endTime = LocalDateTime.now();
 			Duration latency = Duration.between(startTime, endTime);
-			log.info("API | *saveKeyNotesDetails | latency = " + latency +"response = "+ response);
+			log.info("API | *timeDifference | latency = " + latency +"response = "+ response);
 
 		}
 

@@ -21,10 +21,10 @@ public class Test {
 
 		// 2023-05-20T08:10 2023-07-06T08:10
 
-		String ds = "2023-05-20";
-		String de = "2023-07-06";
+		String ds = "2023-07-07 08:10";
+		String de = "2023-08-17 08:10";
 
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 		LocalDate date5 = LocalDate.parse(ds, dtf);
 		LocalDate date6 = LocalDate.parse(de, dtf);

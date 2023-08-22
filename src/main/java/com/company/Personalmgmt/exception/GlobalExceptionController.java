@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -21,21 +22,31 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
 	public ResponseEntity<?> invaliddata(InvalidDataException ex, WebRequest req) {
 
 		ErrorMessage ErrorMessage = new ErrorMessage(ex.getStatus(), ex.getStatusDesc());
-		
+
 		log.error("Exception occured");
 
 		return new ResponseEntity<>(ErrorMessage, HttpStatus.ACCEPTED);
 	}
 	
-	 @ExceptionHandler(NoDataFoundException.class)
-	    public ResponseEntity<Object> handleNodataFoundException(
-	        NoDataFoundException ex, WebRequest request) {
+	@ExceptionHandler(NoDataFoundException.class)
+	public ResponseEntity<Object> handleNodataFoundException(NoDataFoundException ex, WebRequest request) {
 
-	        Map<String, Object> body = new LinkedHashMap<>();
-	        body.put("timestamp", LocalDateTime.now());
-	        body.put("message", "No Data found");
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", "No Data found");
 
-	        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-	    }
+		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+	}
+	/*
+	 * @ExceptionHandler(NoHandlerFoundException.class) public
+	 * ResponseEntity<Object> handlenotFoundException(NoHandlerFoundException ex,
+	 * WebRequest request) {
+	 * 
+	 * Map<String, Object> body = new LinkedHashMap<>(); body.put("timestamp",
+	 * LocalDateTime.now()); body.put("message", "404 error");
+	 * 
+	 * return new ResponseEntity<>(body, HttpStatus.NOT_FOUND); }
+	 */
+	
 	
 }

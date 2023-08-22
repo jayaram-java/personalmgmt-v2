@@ -4,10 +4,6 @@ $(document).ready(function() {
 
 
 	basicOperation();
-
-
-	
-	
 	
 });
 	
@@ -46,7 +42,11 @@ $(document).ready(function() {
 						
 						console.log(data);
 						
-						$("#result13").val(data);
+						$("#result13").val(data.DiffDate);
+						
+						$("#result14").val(data.DiffDays);
+						
+						
 						
 						 document.getElementById("result13").style.color = "#008000";
 						
