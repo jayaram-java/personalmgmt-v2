@@ -12,6 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * @author Jayaram To improve the code standard
+ */
+
+
 @Entity
 @Table(name = "keynotes")
 public class KeyNotesDetails implements Serializable {

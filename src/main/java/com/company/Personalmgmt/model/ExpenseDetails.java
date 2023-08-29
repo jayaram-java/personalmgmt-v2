@@ -41,7 +41,7 @@ public class ExpenseDetails implements Serializable {
 	@Column(name = "month")
 	private String month;
 
-	@Column(name = "expenseId")
+	@Column(name = "expenseId", unique = true)
 	private String expenseId;
 
 	@Column(name = "month_n")

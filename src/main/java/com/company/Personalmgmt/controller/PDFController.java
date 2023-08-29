@@ -23,7 +23,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @RestController
-@RequestMapping("/pdf")
+@RequestMapping("/api/pdf")
 public class PDFController {
 	
 	@Autowired
