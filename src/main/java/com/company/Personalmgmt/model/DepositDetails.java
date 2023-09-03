@@ -67,6 +67,9 @@ public class DepositDetails implements Serializable {
 	@Column(name = "modified_by")
 	private String modifiedBy;
 
+	@Column(name = "bank_name")
+	private String bankName;
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -208,6 +211,14 @@ public class DepositDetails implements Serializable {
 
 	public void setYearMaster(YearMaster yearMaster) {
 		this.yearMaster = yearMaster;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
 	}
 
 }
