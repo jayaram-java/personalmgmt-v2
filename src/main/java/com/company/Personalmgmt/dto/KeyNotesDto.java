@@ -1,5 +1,9 @@
 package com.company.Personalmgmt.dto;
 
+import com.company.Personalmgmt.searialization.CustomSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonSerialize(using = CustomSerializer.class)
 public class KeyNotesDto implements Comparable<KeyNotesDto> {
 
 	private Long id;

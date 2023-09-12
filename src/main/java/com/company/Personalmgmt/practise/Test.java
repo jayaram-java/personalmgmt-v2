@@ -13,12 +13,45 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.company.Personalmgmt.dto.KeyNotesDto;
+import com.company.Personalmgmt.searialization.CustomSerializer;
 import com.company.Personalmgmt.serviceimpl.GeneralServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JsonProcessingException {
 
+	
+		KeyNotesDto keyNotesDto = new KeyNotesDto();
+		
+		keyNotesDto.setLink("http://localhost:8080/personal-mgmt/task");
+		
+		keyNotesDto.setName("personal-mgmt");
+		
+		keyNotesDto.setParent("task");
+		
+		keyNotesDto.setSequenceOrder(100);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		SimpleModule simpleModule = new SimpleModule();
+		
+		simpleModule.addSerializer(KeyNotesDto.class,new CustomSerializer());
+		
+		mapper.registerModule(simpleModule);
+		
+		String result =  mapper.writerWithDefaultPrettyPrinter().writeValueAsString(keyNotesDto);
+		
+		System.out.println(result);
+		
+
+	}
+	
+	public void go12() {
+		
 		// 2023-05-20T08:10 2023-07-06T08:10
 
 		String ds = "2023-07-07 08:10";
@@ -32,7 +65,7 @@ public class Test {
 		long daysBetween = Duration.between(date5, date6).toDays();
 
 		System.out.println("Days between = " + daysBetween);
-
+		
 	}
 
 	public void go() {

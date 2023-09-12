@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "deposit_details")
 public class DepositDetails implements Serializable {
@@ -69,6 +71,10 @@ public class DepositDetails implements Serializable {
 
 	@Column(name = "bank_name")
 	private String bankName;
+
+	@Column(name = "nominee_name")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String nomineeName;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -219,6 +225,14 @@ public class DepositDetails implements Serializable {
 
 	public void setBankName(String bankName) {
 		this.bankName = bankName;
+	}
+
+	public String getNomineeName() {
+		return nomineeName;
+	}
+
+	public void setNomineeName(String nomineeName) {
+		this.nomineeName = nomineeName;
 	}
 
 }
