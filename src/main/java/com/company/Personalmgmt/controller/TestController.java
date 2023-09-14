@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.company.Personalmgmt.dto.BillerDTO;
-import com.company.Personalmgmt.dto.BillerResponse;
 import com.company.Personalmgmt.dto.MoveForwardDto;
+import com.company.Personalmgmt.dto.PayeeDetails;
 import com.company.Personalmgmt.dto.ResponseDto;
 import com.company.Personalmgmt.exception.InvalidDataException;
 import com.company.Personalmgmt.repository.ExpenseCategoryRepository;
@@ -50,14 +50,14 @@ public class TestController {
 
 	@RequestMapping(value = "/testingv1")
 	@ResponseBody
-	public BillerDTO testing() {
-		String jsonResponse = "{\"requestId\":\"123\",\"responseStatus\":\"Success\",\"timestamp\":\"2023-09-13T12:50:44.406Z\",\"billers\":[{\"address\":{\"addressLine1\":null,\"city\":null,\"state\":null,\"zipCode\":null,\"country\":\"USA\"},\"BusinessDaysToDeliver\":\"null\",\"billerId\":\"40\",\"billerName\":\"ADVANTANATIONALBANKMORTGAGE\",\"nickName\":\"ADVANTANATIONALBANKMORTGAGE\",\"ebillSupport\":\"Q:Thisdataisuser-generated.Wheredoesthiscomefrom?\",\"accountNumber\":\"Q:Whatisthis?\",\"NextAvailablePaymentDeliveryDate\":\"Q:Howisthisdetermined?\",\"eBillStatus\":\"Q:Thisdataisuser-generated.Wheredoesthiscomefrom?\",\"paymentMethod\":null,\"status\":null}]}";
+	public PayeeDetails testing() {
+		String jsonResponse = "{\"requestId\":\"9000\",\"backwardFlag\":false,\"forwardFlag\":true,\"responseStatus\":\"Success\",\"timestamp\":\"2023-09-14T11:59:52.055Z\",\"httpStatusCode\":200,\"billers\":[{\"billerName\":\"1ST FINANCIAL BANK USA - CCARD\",\"billerCategory\":\"Pending\",\"billerId\":\"548608\"},{\"billerName\":\"1ST FLORIDA INTEGRITY BANK LOAN\",\"billerCategory\":\"Pending\",\"billerId\":\"586348\"},{\"billerName\":\"1ST NATIONAL BANK OH\",\"billerCategory\":\"Pending\",\"billerId\":\"592306\"},{\"billerName\":\"1ST NATIONAL BANK ST IGNACE LOAN\",\"billerCategory\":\"Pending\",\"billerId\":\"580734\"},{\"billerName\":\"1ST SOURCE BANK LOAN\",\"billerCategory\":\"Pending\",\"billerId\":\"585141\"},{\"billerName\":\"ACNB BANK LOAN\",\"billerCategory\":\"Pending\",\"billerId\":\"570931\"},{\"billerName\":\"ADVANTA NATIONAL BANK MORTGAGE\",\"billerCategory\":\"Pending\",\"billerId\":\"86591\"},{\"billerName\":\"AGFIRST FARM CREDIT BANK\",\"billerCategory\":\"Pending\",\"billerId\":\"576207\"},{\"billerName\":\"AIG FEDERAL SAVINGS BANK\",\"billerCategory\":\"Pending\",\"billerId\":\"501735\"},{\"billerName\":\"ALLEGIANCE BANK TEXAS LOAN\",\"billerCategory\":\"Pending\",\"billerId\":\"583093\"}]}";
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		BillerDTO response1 = null;
+		PayeeDetails response1 = null;
 		try {
-			response1 = objectMapper.readValue(jsonResponse, BillerDTO.class);
+			response1 = objectMapper.readValue(jsonResponse, PayeeDetails.class);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,7 +68,7 @@ public class TestController {
 		
 		//System.out.println(response.getRequestId());
 
-		ResponseEntity<BillerDTO> response = null;
+		ResponseEntity<PayeeDetails> response = null;
 
 		response = ResponseEntity.ok(response1);
 
