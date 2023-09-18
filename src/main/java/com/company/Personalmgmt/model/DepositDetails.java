@@ -46,6 +46,9 @@ public class DepositDetails implements Serializable {
 	@Column(name = "interest_amt")
 	private Double interestAmt;
 
+	@Column(name = "tax_amt")
+	private Double taxAmt;
+
 	@Column(name = "tenure")
 	private Integer tenure;
 
@@ -233,6 +236,14 @@ public class DepositDetails implements Serializable {
 
 	public void setNomineeName(String nomineeName) {
 		this.nomineeName = nomineeName;
+	}
+
+	public Double getTaxAmt() {
+		return taxAmt;
+	}
+
+	public void setTaxAmt(Double taxAmt) {
+		this.taxAmt = taxAmt;
 	}
 
 }

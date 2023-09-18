@@ -55,9 +55,9 @@ public class Test {
 
 		mapper.registerModule(simpleModule);
 
-		String result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(keyNotesDto);
+		//String result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(keyNotesDto);
 
-		System.out.println(result);
+		//System.out.println(result);
 
 	}
 
