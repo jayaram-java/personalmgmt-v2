@@ -62,10 +62,8 @@ import com.itextpdf.layout.property.UnitValue;
 @RequestMapping("/api/pdf/v2")
 public class PDFV2Controller {
 	
-
 	@Autowired
 	ExpenseService expenseService;
-	
 	
 	@RequestMapping(value = "/expensepdf")
 	@ResponseBody
@@ -75,7 +73,6 @@ public class PDFV2Controller {
 
 		List<JSONObject> jsonList = new ArrayList<>();
 		
-
 		for (ExpenseDto expenseDto : expensedtos) {
 
 			JSONObject ob = new JSONObject();
@@ -87,7 +84,6 @@ public class PDFV2Controller {
 			ob.put("Amount", expenseDto.getAmount());
 
 			jsonList.add(ob);
-
 		}
 
 		ExpensePDFGeneratorV2 pdfUtils = new ExpensePDFGeneratorV2();
@@ -109,10 +105,11 @@ public class PDFV2Controller {
 		
 		float dataFontSize = 10f;
 		PdfFont dataFont = ExpensePDFGeneratorV2.createEnglishFont(fontName, dataFontSize);
-
-
 		
-		PdfDocument pdf = new PdfDocument(writer);
+	//	PdfDocument pdf = new PdfDocument(writer);
+		
+		PdfDocument pdf = new PdfDocument(new PdfWriter(out));
+		
 		Document doc = new Document(pdf);
 
 		Div divDate = pdfUtils.createTableDiv(jsonList, headerFont,dataFont);
@@ -120,9 +117,11 @@ public class PDFV2Controller {
 		doc.add(divDate);
 		doc.close();
 
-		String base64String = pdfUtils.convertPdfToBase64("Expense.pdf");
+	//	String base64String = pdfUtils.convertPdfToBase64("Expense.pdf");
 		
-		System.out.println("@@@@@@@@@@@@ "+base64String);
+	//	byte[] pdfData = Base64.getDecoder().decode(base64String);
+		
+		//System.out.println("@@@@@@@@@@@@ "+base64String);
 		
 		try {
 			headers.setContentLength(out.size());
@@ -132,7 +131,7 @@ public class PDFV2Controller {
 			os.close();
 
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 

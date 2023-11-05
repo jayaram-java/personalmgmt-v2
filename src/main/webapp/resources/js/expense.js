@@ -120,9 +120,11 @@ $(document).ready(function() {
 	});
 	
 	
+	
 	$('#pdfcreate').click(function(){
-		window.open("expensepdf");
+		window.open("api/pdf/v2/expensepdf");
 	});
+
 	
 	
 	$('#pdfdownload').click(function(){
