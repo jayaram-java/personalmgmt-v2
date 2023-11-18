@@ -5,6 +5,8 @@ package com.company.Personalmgmt.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -73,6 +76,8 @@ public class PDFV2Controller {
 
 		List<JSONObject> jsonList = new ArrayList<>();
 		
+		double totalAmt = 0.0;
+		
 		for (ExpenseDto expenseDto : expensedtos) {
 
 			JSONObject ob = new JSONObject();
@@ -80,11 +85,23 @@ public class PDFV2Controller {
 			ob.put("Id", expenseDto.getId());
 			ob.put("Name", expenseDto.getName());
 			ob.put("Description", expenseDto.getDescription());
-			ob.put("Date", expenseDto.getDate());
+			ob.put("Date", convertDateFormat(expenseDto.getDate()));
 			ob.put("Amount", expenseDto.getAmount());
+			
+			totalAmt = totalAmt + expenseDto.getAmount();
 
 			jsonList.add(ob);
 		}
+		
+		JSONObject ob = new JSONObject();
+		
+		ob.put("Id", "");
+		ob.put("Name", "");
+		ob.put("Description", "");
+		ob.put("Date", "Total");
+		ob.put("Amount", totalAmt);
+		
+		jsonList.add(ob);
 
 		ExpensePDFGeneratorV2 pdfUtils = new ExpensePDFGeneratorV2();
 		
@@ -105,23 +122,16 @@ public class PDFV2Controller {
 		
 		float dataFontSize = 10f;
 		PdfFont dataFont = ExpensePDFGeneratorV2.createEnglishFont(fontName, dataFontSize);
-		
-	//	PdfDocument pdf = new PdfDocument(writer);
-		
 		PdfDocument pdf = new PdfDocument(new PdfWriter(out));
-		
 		Document doc = new Document(pdf);
-
+		
+		Div divLine = pdfUtils.createHeader(dataFont);
 		Div divDate = pdfUtils.createTableDiv(jsonList, headerFont,dataFont);
-
+		
+		
+		doc.add(divLine);
 		doc.add(divDate);
 		doc.close();
-
-	//	String base64String = pdfUtils.convertPdfToBase64("Expense.pdf");
-		
-	//	byte[] pdfData = Base64.getDecoder().decode(base64String);
-		
-		//System.out.println("@@@@@@@@@@@@ "+base64String);
 		
 		try {
 			headers.setContentLength(out.size());
@@ -134,6 +144,22 @@ public class PDFV2Controller {
 			e.printStackTrace();
 		}
 	}
+	
+	public static String convertDateFormat(String input) {
 
+		String output = "";
+
+		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yy");
+
+		try {
+			Date date = inputFormat.parse(input);
+			output = outputFormat.format(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return output;
+	}
 
 }
