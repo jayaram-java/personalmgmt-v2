@@ -73,10 +73,34 @@ public class PDFV2Controller {
 	public void expensePDFV2(HttpServletResponse response) throws DocumentException, IOException {
 
 		List<ExpenseDto> expensedtos = expenseService.getExpenseDetailBasedpreviousmonth();
+		List<ExpenseDto> expensedtoforCategory = expenseService.getExpenseDetailBasedCategoryPreviousMonth();
+		List<JSONObject> jsonList2 = new ArrayList<>();
+		
+		int n = 1;
+		double totalAmtCategory = 0.0;
+		for (ExpenseDto category : expensedtoforCategory) {
+
+			JSONObject ob = new JSONObject();
+			ob.put("Id", n);
+			ob.put("Category", category.getCategoryName());
+			ob.put("Amount", category.getAmount());
+			
+			totalAmtCategory = totalAmtCategory + category.getAmount();
+			
+			n++;
+			jsonList2.add(ob);
+		}
+		
+        JSONObject ob1 = new JSONObject();
+		
+		ob1.put("Id", "");
+		ob1.put("Category", "Total Expenses");
+		ob1.put("Amount", totalAmtCategory);
+		jsonList2.add(ob1);
 
 		List<JSONObject> jsonList = new ArrayList<>();
-		
 		double totalAmt = 0.0;
+		String month = "";
 		
 		for (ExpenseDto expenseDto : expensedtos) {
 
@@ -89,6 +113,8 @@ public class PDFV2Controller {
 			ob.put("Amount", expenseDto.getAmount());
 			
 			totalAmt = totalAmt + expenseDto.getAmount();
+			
+			month = expenseDto.getMonth();
 
 			jsonList.add(ob);
 		}
@@ -125,12 +151,14 @@ public class PDFV2Controller {
 		PdfDocument pdf = new PdfDocument(new PdfWriter(out));
 		Document doc = new Document(pdf);
 		
-		Div divLine = pdfUtils.createHeader(dataFont);
+		Div divLine = pdfUtils.createHeader(dataFont,month);
 		Div divDate = pdfUtils.createTableDiv(jsonList, headerFont,dataFont);
+		Div divDate2 = pdfUtils.categoryTableDiv(jsonList2, headerFont,dataFont);
 		
 		
 		doc.add(divLine);
 		doc.add(divDate);
+		doc.add(divDate2);
 		doc.close();
 		
 		try {

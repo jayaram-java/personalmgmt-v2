@@ -38,40 +38,42 @@ import com.itextpdf.text.Font;
 
 public class ExpensePDFGeneratorV2 {
 
+	public static PdfWriter createPdfWriter(String dest) throws FileNotFoundException {
+		return new PdfWriter(dest);
+	}
 
-    public static PdfWriter createPdfWriter(String dest) throws FileNotFoundException {
-        return new PdfWriter(dest);
-    }
+	public String convertPdfToBase64(String dest) throws IOException {
+		File file = new File(dest);
+		byte[] fileContent = new byte[(int) file.length()];
+		try (FileInputStream inputStream = new FileInputStream(file)) {
+			inputStream.read(fileContent);
+		}
+		return Base64.getEncoder().encodeToString(fileContent);
+	}
 
-    public String convertPdfToBase64(String dest) throws IOException {
-        File file = new File(dest);
-        byte[] fileContent = new byte[(int) file.length()];
-        try (FileInputStream inputStream = new FileInputStream(file)) {
-            inputStream.read(fileContent);
-        }
-        return Base64.getEncoder().encodeToString(fileContent);
-    }
+	public static PdfFont createEnglishFont(String fontName, float fontSize) throws IOException {
+		return PdfFontFactory.createFont(fontName, "UTF-8");
+	}
 
-    public static PdfFont createEnglishFont(String fontName, float fontSize) throws IOException {
-        return PdfFontFactory.createFont(fontName, "UTF-8");
-    }
-    
-    
-	public Div createHeader(PdfFont headerFont) {
+	public Div createHeader(PdfFont headerFont, String month) {
+
+		String header = "EXPENSE OVERVIEW - " + month.toUpperCase();
 
 		Div divDate = new Div();
 
 		try {
 
 			Paragraph headerText = new Paragraph();
-			Paragraph text = new Paragraph("EXPENSE OVERVIEW - OCTOBER ").setFont(headerFont).setFontSize(15f);
-			Color darkBlue = new DeviceRgb(0, 0, 139); 
+			Paragraph text = new Paragraph(header).setFont(headerFont).setFontSize(15f);
+			Color darkBlue = new DeviceRgb(0, 0, 139);
 			text.setFontColor(darkBlue);
 			headerText.add(text);
-			
+
 			divDate.add(headerText);
 
 			divDate.setMarginTop(50);
+			
+		
 
 			Div divLine = createLineDivFromJSONObject();
 
@@ -83,102 +85,125 @@ public class ExpensePDFGeneratorV2 {
 		return divDate;
 	}
 
-    public Div createTableDiv(List<JSONObject> rowDataList, PdfFont headerFont, PdfFont dataFont) {
-        List<String> headerList = new ArrayList<>();
-        headerList.add("Id");
-        headerList.add("Name");
-        headerList.add("Description");
-        headerList.add("Date");
-        headerList.add("Amount");
+	public Div createTableDiv(List<JSONObject> rowDataList, PdfFont headerFont, PdfFont dataFont) {
+		List<String> headerList = new ArrayList<>();
+		headerList.add("Id");
+		headerList.add("Name");
+		headerList.add("Description");
+		headerList.add("Date");
+		headerList.add("Amount");
 
-        Div divDate = new Div();
-        try {
-            Table table = createTable(headerList, headerList, headerFont, dataFont);
-            addRowsToTable(table, headerList, rowDataList, dataFont);
-        	//Div divLine = createLineDivFromJSONObject();
-        	//divDate.add(divLine);
-            divDate.add(table);
-        } catch (Exception e) {
-            // Handle the exception
-        }
-        return divDate;
-    }
+		Div divDate = new Div();
+		try {
+			Table table = createTable(headerList, headerList, headerFont, dataFont);
+			addRowsToTable(table, headerList, rowDataList, dataFont);
 
-    public Table createTable(List<String> headerList, List<String> orderedList, PdfFont headerFont, PdfFont dataFont) {
-        Table table = new Table(headerList.size());
-        try {
-            Color headerColor = new DeviceRgb(173, 216, 230);
-            Cell headerCell;
+			divDate.add(table);
+		} catch (Exception e) {
 
-            for (String header : headerList) {
-                Paragraph headerText = new Paragraph();
-                Paragraph text = new Paragraph(header).setFont(headerFont).setFontSize(12f);
-                headerText.add(text);
+		}
+		return divDate;
+	}
 
-                headerCell = new Cell().add(headerText).setBackgroundColor(headerColor).setBorder(Border.NO_BORDER);
-                table.addHeaderCell(headerCell);
-            }
+	public Table createTable(List<String> headerList, List<String> orderedList, PdfFont headerFont, PdfFont dataFont) {
+		Table table = new Table(headerList.size());
+		try {
+			Color headerColor = new DeviceRgb(173, 216, 230);
+			Cell headerCell;
 
-            table.setTextAlignment(TextAlignment.CENTER);
-            table.setWidth(UnitValue.createPercentValue(100));
+			for (String header : headerList) {
+				Paragraph headerText = new Paragraph();
+				Paragraph text = new Paragraph(header).setFont(headerFont).setFontSize(12f);
+				headerText.add(text);
 
-        } catch (Exception e) {
-            // Handle the exception
-        }
+				headerCell = new Cell().add(headerText).setBackgroundColor(headerColor).setBorder(Border.NO_BORDER);
+				table.addHeaderCell(headerCell);
+			}
 
-        return table;
-    }
+			table.setTextAlignment(TextAlignment.CENTER);
+			table.setWidth(UnitValue.createPercentValue(100));
 
-    public void addRowsToTable(Table table, List<String> headerList, List<JSONObject> rowDataList, PdfFont dataFont) {
-        int rowIndexTable1 = 0;
-        try {
-            Color rowColor = new DeviceRgb(248, 248, 248);
-            
-            Color rowColor2 = new DeviceRgb(144, 238, 144);
+		} catch (Exception e) {
+			// Handle the exception
+		}
 
-            for (JSONObject rowDataMap : rowDataList) {
-                rowIndexTable1++; 
-                for (String row : headerList) {
-                    String cellValue = rowDataMap.optString(row, "");
-                    Paragraph cellText = new Paragraph();
-                    Paragraph text = new Paragraph(cellValue).setFont(dataFont).setFontSize(10f);
-                    cellText.add(text);
-                    
-                    if(row.equals("Date")&&cellValue.equals("Total")){
-                    	
-                    	table.addCell(new Cell().add(cellText).setBackgroundColor(rowColor2).setBorder(Border.NO_BORDER));
-                    	
-                    }else if (rowIndexTable1 % 2 == 0) {
-                    	
-                        table.addCell(new Cell().add(cellText).setBackgroundColor(rowColor).setBorder(Border.NO_BORDER));
-                    } else {
-                        table.addCell(new Cell().add(cellText).setBorder(Border.NO_BORDER));
-                    }
-                }
-            }
+		return table;
+	}
 
-        } catch (Exception e) {
-            // Handle the exception
-        }
-    }
-    
-    
-    private Div createLineDivFromJSONObject() {
-        String lineBase64 = "iVBORw0KGgoAAAANSUhEUgAABXwAAAAECAYAAAA9OPdQAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA9SURBVHgB7dgxEQAgDASwghQ2/AtCCtXRv0RG1jv3FwAAAAAA4+0CAAAAACCC8AUAAAAACCF8AQAAAABCNFLPAjGeV/beAAAAAElFTkSuQmCC";
-        Div divLine = new Div();
-        Image imgLine = createImageFromBase64(lineBase64, 20, 760, 550, 2);
-        divLine.add(imgLine);
-        return divLine;
-    }
+	public void addRowsToTable(Table table, List<String> headerList, List<JSONObject> rowDataList, PdfFont dataFont) {
+		int rowIndexTable1 = 0;
+		try {
+			Color rowColor = new DeviceRgb(248, 248, 248);
+			Color rowColor2 = new DeviceRgb(255, 213, 128);
 
-    private Image createImageFromBase64(String base64Data, float x, float y, float width, float height) {
-        byte[] imageBytes = Base64.getDecoder().decode(base64Data);
-        ImageData imageData = ImageDataFactory.create(imageBytes);
-        Image img = new Image(imageData);
-        img.setFixedPosition(x, y);
-        img.setWidth(UnitValue.createPointValue(width));
-        img.setHeight(height);
-        return img;
-    }
+			for (JSONObject rowDataMap : rowDataList) {
+				rowIndexTable1++;
+				for (String row : headerList) {
+					String cellValue = rowDataMap.optString(row, "");
+					Paragraph cellText = new Paragraph();
+					Paragraph text = new Paragraph(cellValue).setFont(dataFont).setFontSize(10f);
+					cellText.add(text);
+
+					if (row.equals("Date") && cellValue.equals("Total")) {
+						table.addCell(
+								new Cell().add(cellText).setBackgroundColor(rowColor2).setBorder(Border.NO_BORDER));
+					} else if(row.equals("Category") && cellValue.equals("Total Expenses")) {
+						table.addCell(
+								new Cell().add(cellText).setBackgroundColor(rowColor2).setBorder(Border.NO_BORDER));
+					} else if (rowIndexTable1 % 2 == 0) {
+						table.addCell(
+								new Cell().add(cellText).setBackgroundColor(rowColor).setBorder(Border.NO_BORDER));
+					} else {
+						table.addCell(new Cell().add(cellText).setBorder(Border.NO_BORDER));
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			// Handle the exception
+		}
+	}
+
+	private Div createLineDivFromJSONObject() {
+		String lineBase64 = "iVBORw0KGgoAAAANSUhEUgAABXwAAAAECAYAAAA9OPdQAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA9SURBVHgB7dgxEQAgDASwghQ2/AtCCtXRv0RG1jv3FwAAAAAA4+0CAAAAACCC8AUAAAAACCF8AQAAAABCNFLPAjGeV/beAAAAAElFTkSuQmCC";
+		Div divLine = new Div();
+		Image imgLine = createImageFromBase64(lineBase64, 20, 760, 550, 2);
+		divLine.add(imgLine);
+		return divLine;
+	}
+
+	private Image createImageFromBase64(String base64Data, float x, float y, float width, float height) {
+		byte[] imageBytes = Base64.getDecoder().decode(base64Data);
+		ImageData imageData = ImageDataFactory.create(imageBytes);
+		Image img = new Image(imageData);
+		img.setFixedPosition(x, y);
+		img.setWidth(UnitValue.createPointValue(width));
+		img.setHeight(height);
+		return img;
+	}
+
+	public Div categoryTableDiv(List<JSONObject> rowDataList, PdfFont headerFont, PdfFont dataFont) {
+		
+	
+		
+		List<String> headerList = new ArrayList<>();
+		headerList.add("Id");
+		headerList.add("Category");
+		headerList.add("Amount");
+
+		Div divDate = new Div();
+		
+		divDate.setMargin(50);
+		
+		try {
+			Table table = createTable(headerList, headerList, headerFont, dataFont);
+			addRowsToTable(table, headerList, rowDataList, dataFont);
+
+			divDate.add(table);
+		} catch (Exception e) {
+
+		}
+		return divDate;
+	}
 
 }
