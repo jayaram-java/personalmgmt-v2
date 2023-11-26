@@ -87,7 +87,7 @@ public class ExpensePDFGeneratorV2 {
 
 	public Div createTableDiv(List<JSONObject> rowDataList, PdfFont headerFont, PdfFont dataFont) {
 		List<String> headerList = new ArrayList<>();
-		headerList.add("Id");
+		headerList.add("S.No.");
 		headerList.add("Name");
 		headerList.add("Description");
 		headerList.add("Date");
@@ -187,7 +187,7 @@ public class ExpensePDFGeneratorV2 {
 	
 		
 		List<String> headerList = new ArrayList<>();
-		headerList.add("Id");
+		headerList.add("S.No.");
 		headerList.add("Category");
 		headerList.add("Amount");
 

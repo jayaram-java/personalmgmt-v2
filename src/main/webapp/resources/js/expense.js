@@ -151,7 +151,7 @@ $(document).ready(function() {
 					if (isConfirm) {
 
 						$.ajax({
-							url : "emailserviceforexpense",
+							url : "api/pdf/v2/expense/sentemail",
 							type : "POST",
 
 							success : function(data) {

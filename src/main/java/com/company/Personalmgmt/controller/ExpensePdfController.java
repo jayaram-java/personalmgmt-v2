@@ -4,12 +4,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -18,14 +20,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.company.Personalmgmt.dto.ExpenseDto;
 import com.company.Personalmgmt.model.User;
+import com.company.Personalmgmt.pdf.ExpensePDFGeneratorV2;
 import com.company.Personalmgmt.pdf.ExpensePdfGenerator;
 import com.company.Personalmgmt.repository.UserRepository;
 import com.company.Personalmgmt.service.ExpenseService;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.layout.element.Div;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
+
 
 @Controller
 public class ExpensePdfController {
@@ -41,7 +49,7 @@ public class ExpensePdfController {
 	
 	
 	 private static final byte[] ownerPassword = "javaRam".getBytes();
-
+	 
 	
 	@RequestMapping(value = "/expensepdf")
 	@ResponseBody

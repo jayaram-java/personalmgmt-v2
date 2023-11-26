@@ -97,7 +97,7 @@ public class EmailJobSchedulerController {
 		JobDataMap jobDataMap = new JobDataMap();
 
 		jobDataMap.put("email", "jayaramp51096@gmail.com");
-		jobDataMap.put("subject", "Email From spring-implementing scheduler-5");
+		jobDataMap.put("subject", "Expense overview");
 		jobDataMap.put("body", "Dear Ram,");
 
 		return JobBuilder.newJob(EmailJobScheduler.class).withIdentity(UUID.randomUUID().toString(), "email-jobs")
