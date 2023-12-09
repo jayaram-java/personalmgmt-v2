@@ -104,6 +104,14 @@ body {
 			</thead>
 		</table>
 	</div>
+	
+		<div align="right">
+	 <input type="button" class="button" value="Sending Email"
+			id="emailsent">&nbsp &nbsp &nbsp &nbsp <input type="button"
+			class="button" value="PDF" id="pdfcreate"> &nbsp &nbsp &nbsp
+		&nbsp
+
+	</div>
 
 	
 	<br>

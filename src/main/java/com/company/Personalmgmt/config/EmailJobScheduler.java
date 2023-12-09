@@ -73,7 +73,7 @@ public class EmailJobScheduler extends QuartzJobBean {
 		String body = jobDataMap.getString("body");
 		String recipientEmail = jobDataMap.getString("email");
 
-		sendMail("", recipientEmail, subject, body);
+		sendMailV2("", recipientEmail, subject, body);
 
 	}
 	
@@ -231,13 +231,10 @@ public class EmailJobScheduler extends QuartzJobBean {
 			String month = String.valueOf(earlier.getMonth());
 			
 			long userId = 1;
-			
 			Optional<User> user = userRepository.findById(userId);
 
 			final String sendto = user.get().getEmail();
-
 			final String subject1 = "EXPENSE - ".concat(month).concat(" REPORT");
-			
 			SecondaryUserDetails secondaryUserDetails = secondaryUserDetailsRepository.findByEmailAddress(user.get().getEmail());
 			
 			username = secondaryUserDetails.getName();

@@ -43,7 +43,7 @@ public class EmailJobSchedulerController {
 	//@RequestMapping(value = "/schedulerCheck", method = { RequestMethod.POST, RequestMethod.GET })
 	@Scheduled(cron= "0 0/5 20-23 1-5 * ?")
 	public String scheduleApply() {
-
+		
 		String response = "";
 
 		try {

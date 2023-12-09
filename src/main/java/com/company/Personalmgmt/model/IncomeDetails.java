@@ -54,6 +54,12 @@ public class IncomeDetails implements Serializable {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@Column(name = "profession_tax")
+	private Double professionTax;
+
+	@Column(name = "provident_fund")
+	private Double providentFund;
+
 	public Long getId() {
 		return id;
 	}
@@ -116,6 +122,22 @@ public class IncomeDetails implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Double getProfessionTax() {
+		return professionTax;
+	}
+
+	public void setProfessionTax(Double professionTax) {
+		this.professionTax = professionTax;
+	}
+
+	public Double getProvidentFund() {
+		return providentFund;
+	}
+
+	public void setProvidentFund(Double providentFund) {
+		this.providentFund = providentFund;
 	}
 
 }
