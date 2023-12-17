@@ -181,19 +181,15 @@ body {
 			</div>
 		</div> 
 		
-		<!-- <div class="dropdown">
+		<div class="dropdown">
 			<button class="dropbtn">
-				Personal <i class="fa fa-caret-down"></i>
+				Investment <i class="fa fa-caret-down"></i>
 			</button>
 			<div class="dropdown-content">
-				<a href="checklist">Check List</a>
-				<a href="#">Property</a>
-				<a href="#">Personal Info</a>
-				<a href="#">Colleague List</a>
-				<a href="#">File Mgmt</a>
-				<a href="#">Move Forward</a>
+				<a href="deposits">Deposit Details</a>
 			</div>
-		</div> -->
+		</div>
+	
 		
 			<div class="dropdown">
 			<button class="dropbtn">

@@ -31,47 +31,44 @@ import com.company.Personalmgmt.repository.UserRepository;
 import com.company.Personalmgmt.repository.YearMasterRepository;
 import com.company.Personalmgmt.serviceimpl.LoginServiceImpl;
 
-
-
 @Controller
 public class NavigationController {
-	
+
 	@Autowired
 	HttpSession httpsession;
-	
+
 	@Autowired
 	PropertyCategoryRepository propertyCategoryRepository;
-	
+
 	@Autowired
 	QuotesDetailRepository quotesDetailRepository;
-	
+
 	@Autowired
 	ExpenseCategoryRepository expenseCategoryRepository;
-	
+
 	@Autowired
 	MonthMasterRepository monthMasterRepository;
-	
+
 	@Autowired
 	YearMasterRepository yearMasterRepository;
-	
+
 	@Autowired
 	CheckListCategoryRepository checkListCategoryRepository;
-	
+
 	@Autowired
 	KeyNotesCategoryRepository keyNotesCategoryRepository;
-	
+
 	@Autowired
 	StatusMasterRepository statusMasterRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
 
-	 private static final org.slf4j.Logger log = LoggerFactory.getLogger(LoginServiceImpl.class);
-	
-	
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(LoginServiceImpl.class);
+
 	@RequestMapping(value = { "/", "/home" })
 	public String home() {
-		
+
 		log.info("jsp page = employeeLogin");
 
 		return "employeeLogin";
@@ -88,7 +85,7 @@ public class NavigationController {
 
 		return "user/employee";
 	}
-	
+
 	@RequestMapping(value = { "/timeDifference" })
 	public String timeDifference() {
 
@@ -99,7 +96,7 @@ public class NavigationController {
 
 		return "user/timeDifference";
 	}
-	
+
 	@RequestMapping(value = { "/basicCalculator" })
 	public String basicCalculator() {
 
@@ -110,16 +107,17 @@ public class NavigationController {
 
 		return "user/BasicCalculator";
 	}
-	
+
 	@RequestMapping(value = { "/conversion" })
 	public String converter() {
-		/*if (httpsession.getAttribute("username") == null) {
-
-			return "redirect:/";
-		}*/
+		/*
+		 * if (httpsession.getAttribute("username") == null) {
+		 * 
+		 * return "redirect:/"; }
+		 */
 		return "user/conversion";
 	}
-	
+
 	@RequestMapping(value = { "/discountCalc" })
 	public String discountCalc() {
 
@@ -130,7 +128,7 @@ public class NavigationController {
 
 		return "user/discountCalc";
 	}
-	
+
 	@RequestMapping(value = { "/user" })
 	public String user() {
 
@@ -141,7 +139,7 @@ public class NavigationController {
 
 		return "user";
 	}
-	
+
 	@RequestMapping(value = { "/expenseCategory" })
 	public String expenseCategory() {
 
@@ -152,7 +150,7 @@ public class NavigationController {
 
 		return "expenseCategory";
 	}
-	
+
 	@RequestMapping(value = { "/userProfile" })
 	public String userProfile() {
 
@@ -185,8 +183,7 @@ public class NavigationController {
 
 		return "user/priority";
 	}
-	
-	
+
 	@RequestMapping(value = { "/admin" })
 	public String adminlogin() {
 
@@ -194,7 +191,7 @@ public class NavigationController {
 
 		return "adminLogin";
 	}
-	
+
 	@RequestMapping(value = { "/testing" })
 	public ModelAndView test() {
 
@@ -203,7 +200,7 @@ public class NavigationController {
 
 	@RequestMapping(value = { "/websitelink" })
 	public String webSiteLink() {
-		
+
 		if (httpsession.getAttribute("username") == null) {
 
 			return "redirect:/";
@@ -211,8 +208,7 @@ public class NavigationController {
 
 		return "user/webSiteLink";
 	}
-	
-	
+
 	@RequestMapping(value = { "/developing" })
 	public String developing() {
 
@@ -226,7 +222,7 @@ public class NavigationController {
 
 	@RequestMapping(value = { "/checklist" })
 	public ModelAndView checkList() {
-		
+
 		long userId = (Long) httpsession.getAttribute("userId");
 
 		List<StatusMaster> statusMaster = statusMasterRepository.findAll();
@@ -235,10 +231,10 @@ public class NavigationController {
 
 		ModelAndView result = new ModelAndView("user/checkList");
 
-		List<CheckListCategory> checkListCategory = checkListCategoryRepository.findByStatusAndUserId("active",userId);
+		List<CheckListCategory> checkListCategory = checkListCategoryRepository.findByStatusAndUserId("active", userId);
 
 		result.addObject("checkListCategory", checkListCategory);
-		
+
 		result.addObject("statusMaster", statusMaster);
 
 		if (httpsession.getAttribute("username") == null) {
@@ -248,7 +244,7 @@ public class NavigationController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = { "/dashboard" })
 	public String dashboard() {
 
@@ -259,8 +255,6 @@ public class NavigationController {
 
 		return "user/dashboard";
 	}
-	
-	
 
 	@RequestMapping(value = { "/property" })
 	public ModelAndView property() {
@@ -270,45 +264,43 @@ public class NavigationController {
 		ModelAndView result = new ModelAndView("user/property");
 
 		result.addObject("propertycategory", propertyCategory);
-		
-		//log.info("property page");
+
+		// log.info("property page");
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = { "/quotes" })
 	public ModelAndView quotes() {
-		
+
 		List<QuotesDetail> QuotesDetail = quotesDetailRepository.findAll();
-		
+
 		ModelAndView result = new ModelAndView("user/quotes");
 
 		result.addObject("quotesHead", "Courage");
-		
+
 		result.addObject("quote", QuotesDetail);
-		
-		//log.info("quotes page");
+
+		// log.info("quotes page");
 
 		return result;
 	}
-	
-	
+
 	@RequestMapping(value = { "/quotesClickView" })
 	public ModelAndView quotesClickView() {
-		
+
 		List<QuotesDetail> QuotesDetail = quotesDetailRepository.findAll();
-		
+
 		ModelAndView result = new ModelAndView("user/quotesClickView");
 
 		result.addObject("quotesHead", "Courage");
-		
+
 		result.addObject("quote", QuotesDetail);
-		
-		//log.info("quotes click view page");
+
+		// log.info("quotes click view page");
 
 		return result;
 	}
-	
 
 	@RequestMapping(value = { "/multiLanguage" })
 	public String multiLanguage() {
@@ -318,7 +310,7 @@ public class NavigationController {
 		}
 		return "user/multiLanguage";
 	}
-	
+
 	@RequestMapping(value = { "/personalinfo" })
 	public String personalInfo() {
 
@@ -328,48 +320,47 @@ public class NavigationController {
 
 		return "user/personalInfo";
 	}
-	
+
 	@RequestMapping(value = { "/goback" })
 	public String goBack() {
-		
+
 		if (httpsession.getAttribute("username") == null) {
 			return "redirect:/";
 		}
 
 		return "user/goBack";
 	}
-	
 
 	@RequestMapping(value = { "/codeConversion" })
 	public String codeConversion() {
-		
+
 		if (httpsession.getAttribute("username") == null) {
 			return "redirect:/";
 		}
 
 		return "user/encodeDecode";
 	}
-	
+
 	@RequestMapping(value = { "/neighbourinfo" })
 	public String neighbourInfo() {
-		
+
 		if (httpsession.getAttribute("username") == null) {
 			return "redirect:/";
 		}
 
 		return "user/neighbourInfo";
 	}
-	
+
 	@RequestMapping(value = { "/interLinkSoftware" })
 	public String interLinkSoftware() {
-		
+
 		if (httpsession.getAttribute("username") == null) {
 			return "redirect:/";
 		}
 
 		return "user/interLinkSoftware";
 	}
-	
+
 	@RequestMapping(value = { "/nxtcompany" })
 	public String nxtcompany() {
 
@@ -391,7 +382,7 @@ public class NavigationController {
 
 		return "user/fileMgmt";
 	}
-	
+
 	@RequestMapping(value = { "/moveforward" })
 	public String moveForward() {
 
@@ -402,49 +393,48 @@ public class NavigationController {
 
 		return "user/moveForward";
 	}
-	
+
 	@RequestMapping(value = { "/expensereport" })
 	public ModelAndView expenseReport() {
-		
+
 		List<ExpenseCategory> expenseCategory = expenseCategoryRepository.findAll();
-		
+
 		List<MonthMaster> monthMaster = monthMasterRepository.findAll();
-		
+
 		ModelAndView result = new ModelAndView("user/expenseReport");
 
 		result.addObject("expenseCategory", expenseCategory);
-		
+
 		result.addObject("monthMaster", monthMaster);
-		
-		List<YearMaster> yearMaster  = yearMasterRepository.findAll();
-		
+
+		List<YearMaster> yearMaster = yearMasterRepository.findAll();
+
 		result.addObject("yearMaster", yearMaster);
 
-		/*if (httpsession.getAttribute("username") == null) {
-
-			return "redirect:/";
-		}*/
+		/*
+		 * if (httpsession.getAttribute("username") == null) {
+		 * 
+		 * return "redirect:/"; }
+		 */
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = { "/expensereportviaprice" })
 	public ModelAndView expenseReportBasedonPrice() {
-		
+
 		List<ExpenseCategory> expenseCategory = expenseCategoryRepository.findAll();
 		List<MonthMaster> monthMaster = monthMasterRepository.findAll();
-		
+
 		ModelAndView result = new ModelAndView("user/expenseReportBasedonPrice");
-	    result.addObject("expenseCategory", expenseCategory);
+		result.addObject("expenseCategory", expenseCategory);
 		result.addObject("monthMaster", monthMaster);
-	    List<YearMaster> yearMaster  = yearMasterRepository.findAll();
+		List<YearMaster> yearMaster = yearMasterRepository.findAll();
 		result.addObject("yearMaster", yearMaster);
 
-		
 		return result;
 	}
-	
-	
+
 	@RequestMapping(value = { "/last7day" })
 	public String graphLastSeven() {
 
@@ -455,7 +445,7 @@ public class NavigationController {
 
 		return "user/graphLastSeven";
 	}
-	
+
 	@RequestMapping(value = { "/graphActualAmt" })
 	public ModelAndView graphActualAmt() {
 
@@ -472,7 +462,7 @@ public class NavigationController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = { "/graphExpenseCategory" })
 	public String graphExpenseCategory() {
 
@@ -483,11 +473,10 @@ public class NavigationController {
 
 		return "user/graphExpenseCategory";
 	}
-	
+
 	@RequestMapping(value = { "/graphPaymentMode" })
 	public ModelAndView graphPaymentMode() {
-		
-		
+
 		ModelAndView result = new ModelAndView("user/graphPaymentMode");
 
 		List<YearMaster> yearMaster = yearMasterRepository.findAll();
@@ -501,10 +490,10 @@ public class NavigationController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = { "/graphAvgAmt" })
 	public ModelAndView graphAvgAmt() {
-		
+
 		ModelAndView result = new ModelAndView("user/graphAvgAmt");
 
 		List<YearMaster> yearMaster = yearMasterRepository.findAll();
@@ -518,10 +507,9 @@ public class NavigationController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = { "/graphFinancialYear" })
 	public ModelAndView graphFinancialYear() {
-		
 
 		ModelAndView result = new ModelAndView("user/graphFinancialYear");
 
@@ -536,10 +524,10 @@ public class NavigationController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = { "/graphBalanceSheet" })
 	public ModelAndView graphBalanceSheet() {
-		
+
 		ModelAndView result = new ModelAndView("user/graphBalanceSheet");
 
 		List<YearMaster> yearMaster = yearMasterRepository.findAll();
@@ -553,10 +541,10 @@ public class NavigationController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = { "/timesheet" })
 	public ModelAndView timesheet() {
-		
+
 		ModelAndView result = new ModelAndView("user/timeSheet");
 
 		if (httpsession.getAttribute("username") == null) {
@@ -566,7 +554,7 @@ public class NavigationController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = { "/expenseReportPagination" })
 	public String expenseReportPagination() {
 
@@ -577,24 +565,23 @@ public class NavigationController {
 
 		return "user/expenseReportPagination";
 	}
-	
+
 	@RequestMapping(value = { "/product" })
 	public String product() {
 
 		return "user/product";
 	}
-	
-	
+
 	@RequestMapping(value = { "/keyNotes" })
 	public ModelAndView keyNotes() {
-		
+
 		long userId = (Long) httpsession.getAttribute("userId");
 		ModelAndView resulttologin = new ModelAndView("user/employeeLogin");
 
 		ModelAndView result = new ModelAndView("user/keyNotes");
 
-		List<KeyNotesCategory> keyNotesCategory = keyNotesCategoryRepository.findByStatusAndUserId("active",userId);
-		
+		List<KeyNotesCategory> keyNotesCategory = keyNotesCategoryRepository.findByStatusAndUserId("active", userId);
+
 		Comparator<KeyNotesCategory> com = new Comparator<KeyNotesCategory>() {
 
 			@Override
@@ -608,8 +595,8 @@ public class NavigationController {
 			}
 
 		};
-		
-		Collections.sort(keyNotesCategory,com);
+
+		Collections.sort(keyNotesCategory, com);
 
 		result.addObject("keyNotesCategory", keyNotesCategory);
 
@@ -621,6 +608,24 @@ public class NavigationController {
 		return result;
 	}
 	
-	
-	
+	@RequestMapping(value = { "/deposits" })
+	public ModelAndView depositDetails() {
+
+		ModelAndView resulttologin = new ModelAndView("user/employeeLogin");
+
+		ModelAndView result = new ModelAndView("user/depositDetails");
+		
+
+		List<YearMaster> yearMaster = yearMasterRepository.findAll();
+
+		result.addObject("yearMaster", yearMaster);
+
+		if (httpsession.getAttribute("username") == null) {
+
+			return resulttologin;
+		}
+
+		return result;
+	}
+
 }

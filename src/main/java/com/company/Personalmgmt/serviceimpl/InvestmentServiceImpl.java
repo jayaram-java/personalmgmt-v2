@@ -83,7 +83,7 @@ public class InvestmentServiceImpl implements InvestmentService {
 		} finally {
 			LocalDateTime endTime = LocalDateTime.now();
 			Duration latency = Duration.between(startTime, endTime);
-			log.info("API | *saveKeyNotesDetails | latency = " + latency);
+			log.info("API | *getAllDepositDetails | latency = " + latency);
 		}
 
 		Map<String, Object> summary = new HashMap<String, Object>();
@@ -111,6 +111,67 @@ public class InvestmentServiceImpl implements InvestmentService {
 		});
 		return depositDetails;
 	}
-	
+
+
+	@Override
+	public Map<String, Object> getDepositDetailsById(String accountNo) {
+
+		log.info("API name = *getDepositDetailsById");
+
+		Map<String, Object> res = new HashMap<String, Object>();
+		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+
+		List<DepositDetails> depositDetails = depositDetailsRepository.findByDepositAccNo(accountNo);
+
+		LocalDateTime startTime = LocalDateTime.now();
+
+		try {
+
+			for (DepositDetails depositDetail : depositDetails) {
+
+				double taxFromInterestAmt = 0.0;
+
+				Map<String, Object> ob = new HashMap<String, Object>();
+
+				ob.put("AccountNumber", depositDetail.getDepositAccNo());
+				ob.put("BankName", depositDetail.getBankName());
+				ob.put("OpenDate", depositDetail.getDepositDate());
+				ob.put("PrincipalAmt", depositDetail.getPrincipalAmt());
+				ob.put("AccountType", "FD-Term deposit");
+				ob.put("ROI(%)", depositDetail.getFri());
+				ob.put("InterestAmt", depositDetail.getInterestAmt());
+				ob.put("MaturityAmount", depositDetail.getMaturityAmt());
+				ob.put("MaturityDate", depositDetail.getMaturityDate());
+				ob.put("Tax", depositDetail.getTaxAmt());
+
+				if (depositDetail.getTaxAmt() != null) {
+					taxFromInterestAmt = (depositDetail.getTaxAmt() / depositDetail.getInterestAmt()) * 100;
+				}
+
+				String formattedValue = String.format("%.2f", taxFromInterestAmt);
+
+				ob.put("TaxFromInterestAmt(%)", formattedValue);
+
+				String maturityDate[] = depositDetail.getMaturityDate().split("-");
+				String sort = maturityDate[2].concat(maturityDate[1]).concat(maturityDate[0]);
+
+				ob.put("MaturityDateBased", sort);
+				response.add(ob);
+			}
+
+		} catch (Exception e) {
+			log.error("Exception " + e);
+		} finally {
+			LocalDateTime endTime = LocalDateTime.now();
+			Duration latency = Duration.between(startTime, endTime);
+			log.info("API | *getDepositDetailsById | latency = " + latency);
+		}
+
+		List<Map<String, Object>> finalResponse = sortBasedOnMaturityDate(response);
+
+		res.put("DepositDetails", finalResponse);
+
+		return res;
+	}
 
 }

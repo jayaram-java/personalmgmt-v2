@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.company.Personalmgmt.dto.KeyNotesDto;
 import com.company.Personalmgmt.service.InvestmentService;
 
 /**
@@ -31,6 +33,15 @@ public class InvestmentController {
 	public Map<String, Object> getAllDepositDetails() {
 
 		Map<String, Object> depositDetials = investmentService.getAllDepositDetails();
+
+		return depositDetials;
+	}
+	
+	@RequestMapping(value = "/getDetailsFromId", method = { RequestMethod.POST, RequestMethod.GET })
+	@ResponseBody
+	public Map<String, Object> getKeyNotesDetailsFromId(@RequestParam String accountno) {
+
+		Map<String, Object> depositDetials = investmentService.getDepositDetailsById(accountno);
 
 		return depositDetials;
 	}

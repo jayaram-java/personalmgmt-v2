@@ -9,7 +9,9 @@ import com.company.Personalmgmt.model.DepositDetails;
 
 @Repository
 public interface DepositDetailsRepository extends JpaRepository<DepositDetails, Long> {
-	
-	List<DepositDetails> findByUserIdAndIsActive(long id,String status);
+
+	List<DepositDetails> findByUserIdAndIsActive(long id, String status);
+
+	List<DepositDetails> findByDepositAccNo(String accountNo);
 
 }
