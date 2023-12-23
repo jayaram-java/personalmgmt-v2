@@ -174,4 +174,68 @@ public class InvestmentServiceImpl implements InvestmentService {
 		return res;
 	}
 
+
+	@Override
+	public Map<String, Object> getDepositDetails(String year, String bankName) {
+		log.info("API name = *getDepositDetails");
+
+		Map<String, Object> res = new HashMap<String, Object>();
+		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+		long id = 1;
+		List<DepositDetails> depositDetails = depositDetailsRepository.findByYearMasterYearAndBankNameAndIsActive(year,bankName, "Y");
+
+		Double totalPrincipalAmt = 0.0;
+		Double totalMaturityAmt = 0.0;
+
+		LocalDateTime startTime = LocalDateTime.now();
+
+		try {
+
+			for (DepositDetails depositDetail : depositDetails) {
+
+				Map<String, Object> ob = new HashMap<String, Object>();
+
+				ob.put("AccountNumber", depositDetail.getDepositAccNo());
+				ob.put("BankName", depositDetail.getBankName());
+				ob.put("OpenDate", depositDetail.getDepositDate());
+				ob.put("PrincipalAmt", depositDetail.getPrincipalAmt());
+				ob.put("AccountType", "FD-Term deposit");
+				ob.put("ROI(%)", depositDetail.getFri());
+				ob.put("InterestAmt", depositDetail.getInterestAmt());
+				ob.put("MaturityAmount", depositDetail.getMaturityAmt());
+				ob.put("MaturityDate", depositDetail.getMaturityDate());
+				
+				String maturityDate[] = depositDetail.getMaturityDate().split("-");
+				
+				String sort = maturityDate[2].concat(maturityDate[1]).concat(maturityDate[0]);
+				
+				ob.put("MaturityDateBased", sort);
+
+				totalPrincipalAmt = totalPrincipalAmt + depositDetail.getPrincipalAmt();
+				totalMaturityAmt = totalMaturityAmt + depositDetail.getMaturityAmt();
+				response.add(ob);
+			}
+			
+			
+
+		} catch (Exception e) {
+			log.error("Exception " + e);
+		} finally {
+			LocalDateTime endTime = LocalDateTime.now();
+			Duration latency = Duration.between(startTime, endTime);
+			log.info("API | *getDepositDetails | latency = " + latency);
+		}
+
+		Map<String, Object> summary = new HashMap<String, Object>();
+		summary.put("TotalPrincipalAmt", totalPrincipalAmt);
+		summary.put("TotalMaturityAmt", totalMaturityAmt);
+		
+		List<Map<String, Object>> finalResponse = sortBasedOnMaturityDate(response);
+
+		res.put("DepositDetails", finalResponse);
+		res.put("Summary", summary);
+
+		return res;
+	}
+
 }

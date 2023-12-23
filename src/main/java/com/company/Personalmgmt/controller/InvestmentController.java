@@ -39,11 +39,24 @@ public class InvestmentController {
 	
 	@RequestMapping(value = "/getDetailsFromId", method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
-	public Map<String, Object> getKeyNotesDetailsFromId(@RequestParam String accountno) {
+	public Map<String, Object> getDepositDetailsById(@RequestParam String accountno) {
 
 		Map<String, Object> depositDetials = investmentService.getDepositDetailsById(accountno);
 
 		return depositDetials;
 	}
+	
+	@RequestMapping(value = "/getDetailsFromBankName", method = { RequestMethod.POST, RequestMethod.GET })
+	@ResponseBody
+	public Map<String, Object> getKeyNotesDetailsFromId(@RequestParam String year, @RequestParam String bankName) {
+
+		Map<String, Object> depositDetials = investmentService.getDepositDetails(year, bankName);
+		
+		System.out.println("depositDetials = "+ depositDetials);
+
+		return depositDetials;
+	}
+	
+	
 
 }

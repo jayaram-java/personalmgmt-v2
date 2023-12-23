@@ -82,15 +82,13 @@ $(document).ready(function() {
 	document.addEventListener("click", closeAllSelect);
 		 
 	
-	$('#searchExpenseReport').click(function() {
+	$('#searchDepositDetails').click(function() {
 		
 		var year = $("#year").val();
 		
-		var expenseCategory = $("#expenseName").val();
+		var bankName = $("#bankName").val();
 		
-	
-		
-		if(year == ""  || expenseCategory == "" ){
+		if(year == ""  || bankName == "" ){
 			
 			swal({
 				title: "",
@@ -100,8 +98,8 @@ $(document).ready(function() {
 			
 		} else{
 			
-			jQuery("#expensereportinfodataTable").DataTable().clear();
-			jQuery("#expensereportinfodataTable").DataTable().ajax.url("getExpenseReport?year="+year+"&category="+expenseCategory).load();
+			jQuery("#depositInfoDataTable").DataTable().clear();
+			jQuery("#depositInfoDataTable").DataTable().ajax.url("investment/getDetailsFromBankName?year="+year+"&bankName="+bankName).load();
 		}
 
 	});

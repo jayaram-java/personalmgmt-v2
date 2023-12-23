@@ -3,6 +3,7 @@ package com.company.Personalmgmt.controller;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.company.Personalmgmt.model.CheckListCategory;
+import com.company.Personalmgmt.model.DepositDetails;
 import com.company.Personalmgmt.model.ExpenseCategory;
 import com.company.Personalmgmt.model.KeyNotesCategory;
 import com.company.Personalmgmt.model.MonthMaster;
@@ -21,6 +23,7 @@ import com.company.Personalmgmt.model.QuotesDetail;
 import com.company.Personalmgmt.model.StatusMaster;
 import com.company.Personalmgmt.model.YearMaster;
 import com.company.Personalmgmt.repository.CheckListCategoryRepository;
+import com.company.Personalmgmt.repository.DepositDetailsRepository;
 import com.company.Personalmgmt.repository.ExpenseCategoryRepository;
 import com.company.Personalmgmt.repository.KeyNotesCategoryRepository;
 import com.company.Personalmgmt.repository.MonthMasterRepository;
@@ -60,6 +63,9 @@ public class NavigationController {
 
 	@Autowired
 	StatusMasterRepository statusMasterRepository;
+	
+	@Autowired
+	DepositDetailsRepository depositDetailsRepository;
 
 	@Autowired
 	UserRepository userRepository;
@@ -614,11 +620,16 @@ public class NavigationController {
 		ModelAndView resulttologin = new ModelAndView("user/employeeLogin");
 
 		ModelAndView result = new ModelAndView("user/depositDetails");
-		
 
 		List<YearMaster> yearMaster = yearMasterRepository.findAll();
 
 		result.addObject("yearMaster", yearMaster);
+
+		List<DepositDetails> depositDetails = depositDetailsRepository.findDistinctByBankNameIsNotNull();
+		
+		List<String> response =  depositDetails.stream().map(DepositDetails :: getBankName).distinct().collect(Collectors.toList());
+		
+		result.addObject("bankNames", response);
 
 		if (httpsession.getAttribute("username") == null) {
 

@@ -16,5 +16,7 @@ public interface InvestmentService {
 	Map<String, Object> getAllDepositDetails();
 	
 	Map<String, Object> getDepositDetailsById(String accountNo);
+	
+	Map<String, Object> getDepositDetails(String year,String bankName);
 
 }

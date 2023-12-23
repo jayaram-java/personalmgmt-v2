@@ -105,12 +105,12 @@ body {
 		
 		
 	<div class="custom-select" style="width: 200px;left: 20%;float: left;">
-				<select id="expenseName">
+				<select id="bankName">
 					<option value="">select bank</option>
 					<option value="All">All</option>
-					<c:forEach items="${expenseCategory}" var="expenseCategory">
-								<option value="${expenseCategory.name}"
-									${expenseCategory == name ? 'selected' : ''}>${expenseCategory.name}</option>
+					<c:forEach items="${bankNames}" var="bankNames">
+								<option value="${bankNames}"
+									${bankNames == bankName ? 'selected' : ''}>${bankNames}</option>
 							</c:forEach>
 				</select>
 	</div>
@@ -118,7 +118,7 @@ body {
 	
 	&nbsp;
 	<div class="container1">
-			<input class="button1" type="button" value="search" id="searchExpenseReport" >
+			<input class="button1" type="button" value="search" id="searchDepositDetails" >
 		</div>
 	
 	</div>
