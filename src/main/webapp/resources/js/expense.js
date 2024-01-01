@@ -219,6 +219,9 @@ function expenseTable(){
 
 	       
 	    ],
+        "order": [
+            [0, 'desc'] // Sort by the first column in ascending order
+        ],
 	    
 	    "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
