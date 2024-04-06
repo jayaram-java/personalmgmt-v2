@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
-	
-	
+
+
 	var $loading = $('#loading').hide();
 
 	$(document).ajaxStart(function() {
@@ -9,14 +9,14 @@ $(document).ready(function() {
 	}).ajaxStop(function() {
 		$loading.hide();
 	});
-	
-	
-	
+
+
+
 	expenseTable();
 	expenseCategroyLoad();
 	setAverageAmount();
-	
-	$("#amount").keypress(function (e) {
+
+	$("#amount").keypress(function(e) {
 
 		if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
 
@@ -24,24 +24,24 @@ $(document).ready(function() {
 			return false;
 		}
 	});
-	
+
 	$('#enddate').change(function() {
 
 		var startDate = new Date($('#startdate').val());
 		var endDate = new Date($('#enddate').val());
 
-		if (startDate < endDate){
+		if (startDate < endDate) {
 
 			alert("ok");
 		}
-		else{
+		else {
 			alert("good");
 		}
 
 
 	});
 
-	
+
 	$('#saveexpense').click(function() {
 
 		var id = $("#expenseid").val();
@@ -51,58 +51,101 @@ $(document).ready(function() {
 		var amount = $("#amount").val();
 		var paymentMethod = $("#paymentMethod").val();
 		var categoryName = $("#expensecategory").val();
-		
-		if(name != "" && name != null && description != "" && description != null && date != "" && date != null &&  amount != "" && amount != null){
+
+		if (name != "" && name != null && description != "" && description != null && date != "" && date != null && amount != "" && amount != null) {
 
 			var expenseDto = {
-					"id":id,
-					"name" : name,
-					"description" : description,
-					"date" : date,
-					"amount" : amount,
-					"categoryName":categoryName,
-					"paymentMethod":paymentMethod,
+				"id": id,
+				"name": name,
+				"description": description,
+				"date": date,
+				"amount": amount,
+				"categoryName": categoryName,
+				"paymentMethod": paymentMethod,
 			}
 
-			$.ajax({
-				url : "saveexpensedetails",
-				type :"POST",
-				dataType : 'json',
-				contentType:"application/json",
-				data : JSON.stringify(expenseDto),
+			if (id == "") {
 
-				success : function(data) {
+				$.ajax({
+					url: "saveexpensedetails",
+					type: "POST",
+					dataType: 'json',
+					contentType: "application/json",
+					data: JSON.stringify(expenseDto),
 
-					if(data == true){
-						swal({
-							title: "",
-							text: "Save Successfully.",
-							type: "success",
-							confirmButtonColor: '#DD6B55',
-							confirmButtonText: 'Ok',
-						},function(isConfirm){
+					success: function(data) {
 
-							if (isConfirm){
-								window.location.reload();
-							} else {
+						if (data == true) {
+							swal({
+								title: "",
+								text: "Save Successfully.",
+								type: "success",
+								confirmButtonColor: '#DD6B55',
+								confirmButtonText: 'Ok',
+							}, function(isConfirm) {
 
-							}
-						});
+								if (isConfirm) {
+									window.location.reload();
+								} else {
+
+								}
+							});
+						}
+						else {
+
+							swal({
+								title: "",
+								text: "Not Save",
+								type: "warning",
+							});
+						}
 					}
-					else{
+				});
 
-						swal({
-							title: "",
-							text: "Not Save",
-							type: "warning",
-						});
+			} else {
+
+				$.ajax({
+					url: "saveexpensedetails",
+					type: "POST",
+					dataType: 'json',
+					contentType: "application/json",
+					data: JSON.stringify(expenseDto),
+
+					success: function(data) {
+
+						if (data == true) {
+							swal({
+								title: "",
+								text: "Updated Successfully.",
+								type: "success",
+								confirmButtonColor: '#DD6B55',
+								confirmButtonText: 'Ok',
+							}, function(isConfirm) {
+
+								if (isConfirm) {
+									window.location.reload();
+								} else {
+
+								}
+							});
+						}
+						else {
+
+							swal({
+								title: "",
+								text: "Not Update",
+								type: "warning",
+							});
+						}
 					}
-				}
-			});
+				});
+
+
+			}
 
 
 		}
-		else{
+		else {
 			swal({
 				title: "",
 				text: "Please enter a mandatory fields",
@@ -113,211 +156,211 @@ $(document).ready(function() {
 
 
 	});
-	
-	
-	$('#expenseb').click(function(){
-		$( "#myForm" ).show();
+
+
+	$('#expenseb').click(function() {
+		$("#myForm").show();
 	});
-	
-	
-	
-	$('#pdfcreate').click(function(){
+
+
+
+	$('#pdfcreate').click(function() {
 		window.open("api/pdf/v2/expensepdf");
 	});
 
-	
-	
-	$('#pdfdownload').click(function(){
+
+
+	$('#pdfdownload').click(function() {
 		window.open("expensepdfdownload");
 	});
-	
-	
 
-				$('#emailsent').click(function() {
 
-				swal({
-					title : "Email confirmation",
-					text : "Send expense details to your email?",
-					type : "warning",
-					cancelButtonColor: "#DD6B55",
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText : 'Yeah sure',
-					cancelButtonText : 'No, cancel it!',
-					showCancelButton: true,
-					/*closeOnConfirm: false,
-					closeOnCancel: false*/
-				}, function(isConfirm) {
 
-					if (isConfirm) {
+	$('#emailsent').click(function() {
 
-						$.ajax({
-							url : "api/pdf/v2/expense/sentemail",
-							type : "POST",
+		swal({
+			title: "Email confirmation",
+			text: "Send expense details to your email?",
+			type: "warning",
+			cancelButtonColor: "#DD6B55",
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: 'Yeah sure',
+			cancelButtonText: 'No, cancel it!',
+			showCancelButton: true,
+			/*closeOnConfirm: false,
+			closeOnCancel: false*/
+		}, function(isConfirm) {
 
-							success : function(data) {
+			if (isConfirm) {
 
-								if (data == true) {
-									swal({
-										title : "",
-										text : "Email Sent Successfully !.",
-										type : "success",
-										confirmButtonColor : '#DD6B55',
-										confirmButtonText : 'Ok',
-									}, function(isConfirm) {
+				$.ajax({
+					url: "api/pdf/v2/expense/sentemail",
+					type: "POST",
 
-										if (isConfirm) {
+					success: function(data) {
 
-										} else {
+						if (data == true) {
+							swal({
+								title: "",
+								text: "Email Sent Successfully !.",
+								type: "success",
+								confirmButtonColor: '#DD6B55',
+								confirmButtonText: 'Ok',
+							}, function(isConfirm) {
 
-										}
-									});
+								if (isConfirm) {
+
 								} else {
 
-									swal({
-										title : "",
-										text : "Not Save",
-										type : "warning",
-									});
 								}
+							});
+						} else {
 
-							}
-						});
+							swal({
+								title: "",
+								text: "Not Save",
+								type: "warning",
+							});
+						}
 
-					} else {
-						window.location.reload();
 					}
 				});
 
-			});
+			} else {
+				window.location.reload();
+			}
 		});
 
-function expenseTable(){
-	$('#expensetable').dataTable({
-	    "ajax": {
-	       "url": "getallexpensedetails",
-	       "type": 'GET',
-	       "datatype": "json", 
-	       "dataSrc": ""
-	    },
-	    "columns": [
-	    	/* {"data": "id"},*/
-	        {"data": "expenseId"},
-	        {"data": "name"},
-	        {"data": "description"},
-	        {"data": "date"},
-	        {"data": "amount"},
-	        {"data": "month"},
-	        {"data": "categoryName"},
-	        {"data": "createdDate"},
-	        {"data": "modifiedDate"},
-	        {
-                'mRender': function (data, type, row,meta) {
-                 var id = row.id;                                                                  
-                 return '<a href="#" type="buttonclick" class="button" onclick="getbyID(' + id + ')">Edit</a>';
-                  }
-	        }
-
-	       
-	    ],
-        "order": [
-            [0, 'desc'] // Sort by the first column in ascending order
-        ],
-	    
-	    "footerCallback": function ( row, data, start, end, display ) {
-            var api = this.api(), data;
- 
-            // Remove the formatting to get integer data for summation
-            var intVal = function ( i ) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '')*1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-            
-            total = api
-            .column( 4 )
-            .data()
-            .reduce( function (a, b) {
-                return intVal(a) + intVal(b);
-            }, 0 );
-            
-            pageTotal = api
-            .column( 4, { page: 'current'} )
-            .data()
-            .reduce( function (a, b) {
-                return intVal(a) + intVal(b);
-            }, 0 );
-            
-            
-            $( api.column( 4 ).footer() ).html(
-	                'Rs '+pageTotal +' (Rs '+ total +' total)'
-	            );
-	    }
-   
 	});
-	
-	
-	
-	  $('#expensetable123').DataTable( {
-	        "footerCallback": function ( row, data, start, end, display ) {
-	            var api = this.api(), data;
-	 
-	            // Remove the formatting to get integer data for summation
-	            var intVal = function ( i ) {
-	                return typeof i === 'string' ?
-	                    i.replace(/[\$,]/g, '')*1 :
-	                    typeof i === 'number' ?
-	                        i : 0;
-	            };
-	 
-	            // Total over all pages
-	            total = api
-	                .column( 4 )
-	                .data()
-	                .reduce( function (a, b) {
-	                    return intVal(a) + intVal(b);
-	                }, 0 );
-	 
-	            // Total over this page
-	            pageTotal = api
-	                .column( 4, { page: 'current'} )
-	                .data()
-	                .reduce( function (a, b) {
-	                    return intVal(a) + intVal(b);
-	                }, 0 );
-	 
-	            // Update footer
-	            $( api.column( 4 ).footer() ).html(
-	                '$'+pageTotal +' ( $'+ total +' total)'
-	            );
-	        }
-	    } );
-	
+});
+
+function expenseTable() {
+	$('#expensetable').dataTable({
+		"ajax": {
+			"url": "getallexpensedetails",
+			"type": 'GET',
+			"datatype": "json",
+			"dataSrc": ""
+		},
+		"columns": [
+			/* {"data": "id"},*/
+			{ "data": "expenseId" },
+			{ "data": "name" },
+			{ "data": "description" },
+			{ "data": "date" },
+			{ "data": "amount" },
+			{ "data": "month" },
+			{ "data": "categoryName" },
+			{ "data": "createdDate" },
+			{ "data": "modifiedDate" },
+			{
+				'mRender': function(data, type, row, meta) {
+					var id = row.id;
+					return '<a href="#" type="buttonclick" class="button" onclick="getbyID(' + id + ')">Edit</a>';
+				}
+			}
+
+
+		],
+		"order": [
+			[0, 'desc'] // Sort by the first column in ascending order
+		],
+
+		"footerCallback": function(row, data, start, end, display) {
+			var api = this.api(), data;
+
+			// Remove the formatting to get integer data for summation
+			var intVal = function(i) {
+				return typeof i === 'string' ?
+					i.replace(/[\$,]/g, '') * 1 :
+					typeof i === 'number' ?
+						i : 0;
+			};
+
+			total = api
+				.column(4)
+				.data()
+				.reduce(function(a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+
+			pageTotal = api
+				.column(4, { page: 'current' })
+				.data()
+				.reduce(function(a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+
+
+			$(api.column(4).footer()).html(
+				'Rs ' + pageTotal + ' (Rs ' + total + ' total)'
+			);
+		}
+
+	});
+
+
+
+	$('#expensetable123').DataTable({
+		"footerCallback": function(row, data, start, end, display) {
+			var api = this.api(), data;
+
+			// Remove the formatting to get integer data for summation
+			var intVal = function(i) {
+				return typeof i === 'string' ?
+					i.replace(/[\$,]/g, '') * 1 :
+					typeof i === 'number' ?
+						i : 0;
+			};
+
+			// Total over all pages
+			total = api
+				.column(4)
+				.data()
+				.reduce(function(a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+
+			// Total over this page
+			pageTotal = api
+				.column(4, { page: 'current' })
+				.data()
+				.reduce(function(a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+
+			// Update footer
+			$(api.column(4).footer()).html(
+				'$' + pageTotal + ' ( $' + total + ' total)'
+			);
+		}
+	});
+
 }
 
-function getbyID(id){
+function getbyID(id) {
 
 	$("#expenseid").val(id);
-	
+
 	$.ajax({
-		url : "getexpensedetailsbyid",
-		type :"POST",
-		data :{
-			'id' : id,
+		url: "getexpensedetailsbyid",
+		type: "POST",
+		data: {
+			'id': id,
 		},
-		success : function(data) {
-			
+		success: function(data) {
+
 			$("#expensename").val(data.name);
 			$("#description").val(data.description);
 			$("#date").val(data.date);
 			$("#amount").val(data.amount);
 			$("#expensecategory").val(data.categoryName);
 			$("#paymentMethod").val(data.paymentMethod);
-			
-			
+
+
 			$("#saveexpense").val("Update");
 
-			$( "#myForm" ).show();
+			$("#myForm").show();
 
 		}
 	});
@@ -325,23 +368,23 @@ function getbyID(id){
 
 }
 
-function Delete(id){
-	
+function Delete(id) {
+
 }
 
-function refreshPage(){
-    window.location.reload();
-} 
+function refreshPage() {
+	window.location.reload();
+}
 
 function expenseCategroyLoad() {
 	$.ajax({
-		url : 'getallexpensecategory',
-		success : function(result) {
+		url: 'getallexpensecategory',
+		success: function(result) {
 			if (result.length != 0) {
 				$.each(result, function(index, data) {
 					$("#expensecategory").append(
-							"<option value=" + data.name + ">" + data.name
-									+ "</option>");
+						"<option value=" + data.name + ">" + data.name
+						+ "</option>");
 				});
 			}
 		}
@@ -352,11 +395,11 @@ function setAverageAmount() {
 
 	$.ajax({
 
-		url : "getAverageAmount",
-		type : "POST",
+		url: "getAverageAmount",
+		type: "POST",
 
-		success : function(data) {
-			
+		success: function(data) {
+
 			$("#averageExpense").val(data);
 
 		}

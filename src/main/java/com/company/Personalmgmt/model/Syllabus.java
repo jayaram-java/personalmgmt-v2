@@ -27,6 +27,12 @@ public class Syllabus implements Serializable {
 	@Column(name = "parent")
 	private String parent;
 
+	@Column(name = "level")
+	private String level;
+
+	@Column(name = "remark")
+	private String remark;
+
 	@Column(name = "created_date")
 	private Date createdDate;
 
@@ -93,6 +99,22 @@ public class Syllabus implements Serializable {
 
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 }

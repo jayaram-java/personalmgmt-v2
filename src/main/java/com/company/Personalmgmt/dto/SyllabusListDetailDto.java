@@ -10,6 +10,8 @@ public class SyllabusListDetailDto {
 
 	private String parent;
 
+	private String level;
+
 	private int serialId;
 
 	private String createdDate;
@@ -82,6 +84,14 @@ public class SyllabusListDetailDto {
 
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
 	}
 
 }

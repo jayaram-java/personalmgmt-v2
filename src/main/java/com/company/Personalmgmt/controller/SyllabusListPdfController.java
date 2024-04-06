@@ -3,10 +3,12 @@ package com.company.Personalmgmt.controller;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -14,8 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.company.Personalmgmt.dto.SyllabusListDetailDto;
+import com.company.Personalmgmt.pdf.ExpensePDFGeneratorV2;
 import com.company.Personalmgmt.pdf.SyllabusListPdfGenerator;
+import com.company.Personalmgmt.pdf.SyllabusListPdfGeneratorV2;
 import com.company.Personalmgmt.service.SyllabusListService;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.layout.element.Div;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -40,29 +47,19 @@ public class SyllabusListPdfController {
 		HttpHeaders headers = new HttpHeaders();
 
 		Document document = new Document();
-
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-
 		PdfWriter.getInstance(document, out);
-
 		SyllabusListPdfGenerator syllabusListPdfGenerator = new SyllabusListPdfGenerator();
-
 		List<SyllabusListDetailDto> syllabusListDetailDtos = syllabusListService.getSyllabusList();
 
 		document.open();
-
 		document.addTitle("Java Syllabus");
-
 		document.addSubject("Java");
-
 		document.addAuthor("Jayaram");
 
 		Paragraph ob = syllabusListPdfGenerator.addTitlePage();
-
 		PdfPTable content = syllabusListPdfGenerator.headertwo(syllabusListDetailDtos);
-
 		PdfPTable end = syllabusListPdfGenerator.cmpsigndtls();
-		
 		PdfPTable finals = syllabusListPdfGenerator.juriticationdetails();
 
 		document.add(ob);
@@ -84,5 +81,9 @@ public class SyllabusListPdfController {
 		}
 
 	}
+	
+	
+	
+	
 
 }
