@@ -105,7 +105,7 @@ public class SyllabusListPdfGenerator {
 
 		PdfPCell cell8 = new PdfPCell(new Phrase());// 1
 
-		Phrase second = new Phrase("\n\n    Created By. \n      Jayaram    \n Software Developer | Bengalore ", f2);
+		Phrase second = new Phrase("\n\n    Created By. \n      Jayaram    \n Software Developer | Chennai ", f2);
 		
 
 		cell8.addElement(second);
