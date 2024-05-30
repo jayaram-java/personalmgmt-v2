@@ -369,7 +369,10 @@ public class PDFV2Controller {
 		float dataFontSize = 10f;
 		PdfFont dataFont = ExpensePDFGeneratorV2.createEnglishFont(fontName, dataFontSize);
 		PdfDocument pdf = new PdfDocument(new PdfWriter(out));
-		Document doc = new Document(pdf);
+		Document doc = new Document(pdf,PageSize.A4,false);
+		
+		doc.setMargins(doc.getLeftMargin()+ DEFAULT_HEADER_SPACE, doc.getRightMargin(), doc.getTopMargin() , doc.getBottomMargin());
+
 		
 		Div divLine = pdfUtils.createHeader(dataFont,month);
 		Div divDate = pdfUtils.createTableDiv(jsonList, headerFont,dataFont);
@@ -381,6 +384,16 @@ public class PDFV2Controller {
 		doc.add(divDate);
 		doc.add(trainterDetails);
 		doc.add(finals);
+		
+		int numberOfPages = pdf.getNumberOfPages();
+		
+		IntStream.rangeClosed(1, numberOfPages)
+	    .forEach(i -> {
+	        String content = String.format("page %s of %s", numberOfPages, i);
+
+	        doc.showTextAligned(new Paragraph(content), 559, 806, i, TextAlignment.RIGHT, VerticalAlignment.TOP, 0);
+	    });
+		
 		doc.close();
 		
 		try {

@@ -8,8 +8,11 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -319,24 +322,18 @@ public class ExpenseServiceImpl implements ExpenseService {
 		log.info("API name = *getAllExpenseDetails");
 		LocalDateTime startTime = LocalDateTime.now();
 		
-		 AtomicInteger counter = new AtomicInteger(1);
-
+		AtomicInteger counter = new AtomicInteger(1);
 		List<ExpenseDto> expenseDtos = new ArrayList<ExpenseDto>();
-
 		Date datey = new Date();
 
 		SimpleDateFormat format = new SimpleDateFormat("dd-MMMM-yyyy");
-
 		SimpleDateFormat formatz = new SimpleDateFormat("dd-MM-yyyy");
-
 		LocalDate currentdate = LocalDate.now();
 
 		int currentYear = currentdate.getYear();
 
 		String currentDate = formatz.format(datey);
-
 		String datez[] = currentDate.split("-");
-
 		String currentmonth = monthCaluculator(datez[1]);
 
 		long userId = (Long) httpsession.getAttribute("userId");
@@ -432,9 +429,11 @@ public class ExpenseServiceImpl implements ExpenseService {
 			Duration latency = Duration.between(startTime,endTime);
 			log.info("API | *getAllExpenseDetails | latency = "+latency);
 		}
-
+		
+		
 		return expenseDtos;
-	}	
+	}
+	
 	
 	public List<ExpenseDto> getExpenseDetailBasedpreviousmonth() {
 

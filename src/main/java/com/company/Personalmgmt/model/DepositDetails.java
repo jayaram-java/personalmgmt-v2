@@ -86,6 +86,9 @@ public class DepositDetails implements Serializable {
 	@Column(name = "is_active")
 	private String isActive;
 
+	@Column(name = "type")
+	private String type;
+
 	public Long getId() {
 		return id;
 	}
@@ -244,6 +247,14 @@ public class DepositDetails implements Serializable {
 
 	public void setTaxAmt(Double taxAmt) {
 		this.taxAmt = taxAmt;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

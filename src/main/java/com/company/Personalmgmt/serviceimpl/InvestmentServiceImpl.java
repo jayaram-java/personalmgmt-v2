@@ -182,7 +182,16 @@ public class InvestmentServiceImpl implements InvestmentService {
 		Map<String, Object> res = new HashMap<String, Object>();
 		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
 		long id = 1;
-		List<DepositDetails> depositDetails = depositDetailsRepository.findByYearMasterYearAndBankNameAndIsActive(year,bankName, "Y");
+		
+		List<DepositDetails> depositDetails  = null;
+		
+		if (year.equals("9999")) {
+			depositDetails = depositDetailsRepository.findByBankNameAndIsActive(bankName, "Y");
+		} else {
+			depositDetails = depositDetailsRepository.findByYearMasterYearAndBankNameAndIsActive(year, bankName, "Y");
+		}
+		
+		
 
 		Double totalPrincipalAmt = 0.0;
 		Double totalMaturityAmt = 0.0;

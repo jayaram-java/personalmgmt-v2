@@ -17,5 +17,7 @@ public interface DepositDetailsRepository extends JpaRepository<DepositDetails, 
     List<DepositDetails> findDistinctByBankNameIsNotNull();
     
     List<DepositDetails> findByYearMasterYearAndBankNameAndIsActive(String year,String bankName,String status);
+    
+    List<DepositDetails> findByBankNameAndIsActive(String bankName,String status);
 	
 }
