@@ -12,17 +12,11 @@ import com.company.Personalmgmt.model.ExpenseDetails;
 @Repository
 public interface ExpenseDetailsRepository extends JpaRepository<ExpenseDetails, Long> {
 	
-	
-	
-	
-
 	ExpenseDetails findById(long id);
 	
 	List<ExpenseDetails> findByYearAndMonthAndUserId(String year, String month,long id);
 
 	List<ExpenseDetails> findByYearAndMonthAndUserIdOrderByIdDesc(String year, String month,long id);
-	
-	
 	
 	List<ExpenseDetails> findByYearAndUserId(String year,long id);
 	

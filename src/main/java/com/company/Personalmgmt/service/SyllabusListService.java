@@ -7,5 +7,9 @@ import com.company.Personalmgmt.dto.SyllabusListDetailDto;
 public interface SyllabusListService {
 
 	List<SyllabusListDetailDto> getSyllabusList();
+	
+	List<SyllabusListDetailDto> getSyllabusListAd();
+	
+	
 
 }

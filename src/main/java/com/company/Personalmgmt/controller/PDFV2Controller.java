@@ -374,7 +374,91 @@ public class PDFV2Controller {
 		doc.setMargins(doc.getLeftMargin()+ DEFAULT_HEADER_SPACE, doc.getRightMargin(), doc.getTopMargin() , doc.getBottomMargin());
 
 		
-		Div divLine = pdfUtils.createHeader(dataFont,month);
+		Div divLine = pdfUtils.createHeader(dataFont,month,"Java Syllabus ");
+		Div divDate = pdfUtils.createTableDiv(jsonList, headerFont,dataFont);
+		Div trainterDetails = pdfUtils.trainerDetails();
+		Div finals = pdfUtils.juridicationDetails(dataFont);
+
+		
+		doc.add(divLine);
+		doc.add(divDate);
+		doc.add(trainterDetails);
+		doc.add(finals);
+		
+		int numberOfPages = pdf.getNumberOfPages();
+		
+		IntStream.rangeClosed(1, numberOfPages)
+	    .forEach(i -> {
+	        String content = String.format("page %s of %s", numberOfPages, i);
+
+	        doc.showTextAligned(new Paragraph(content), 559, 806, i, TextAlignment.RIGHT, VerticalAlignment.TOP, 0);
+	    });
+		
+		doc.close();
+		
+		try {
+			headers.setContentLength(out.size());
+			OutputStream os = response.getOutputStream();
+			out.writeTo(os);
+			os.flush();
+			os.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(value = "/syllabus/javaAd")
+	@ResponseBody
+	public void syllabusListAdvance(HttpServletResponse response) throws DocumentException, IOException {
+
+		List<SyllabusListDetailDto> syllabusListDetailDtos = syllabusListService.getSyllabusListAd();
+		
+		List<JSONObject> jsonList = new ArrayList<>();
+		String month = "";
+		
+		int n1 = 1;
+		for (SyllabusListDetailDto syllabusListDetailDto : syllabusListDetailDtos) {
+			JSONObject ob = new JSONObject();
+			ob.put("S.No.", n1);
+			ob.put("Topics", syllabusListDetailDto.getTopic());
+			ob.put("Parent", syllabusListDetailDto.getParent());
+			ob.put("Level", syllabusListDetailDto.getLevel());
+			n1++;
+			jsonList.add(ob);
+		}
+		
+		JSONObject ob = new JSONObject();
+		ob.put("S.No.", "");
+		ob.put("Topics", "");
+		ob.put("Parent", "");
+		ob.put("Level", "");
+		jsonList.add(ob);
+
+		SyllabusListPdfGeneratorV2 pdfUtils = new SyllabusListPdfGeneratorV2();
+		
+		response.setHeader("Expires", "0");
+        response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+        response.setHeader("Pragma", "public");
+       	response.setContentType("application/pdf");
+		
+		HttpHeaders headers = new HttpHeaders();
+		
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		float headerFontSize = 12f;
+		String fontName = "Helvetica";
+		PdfFont headerFont = ExpensePDFGeneratorV2.createEnglishFont(fontName, headerFontSize);
+		
+		float dataFontSize = 10f;
+		PdfFont dataFont = ExpensePDFGeneratorV2.createEnglishFont(fontName, dataFontSize);
+		PdfDocument pdf = new PdfDocument(new PdfWriter(out));
+		Document doc = new Document(pdf,PageSize.A4,false);
+		
+		doc.setMargins(doc.getLeftMargin()+ DEFAULT_HEADER_SPACE, doc.getRightMargin(), doc.getTopMargin() , doc.getBottomMargin());
+
+		
+		Div divLine = pdfUtils.createHeader(dataFont,month,"Advance Java Syllabus ");
 		Div divDate = pdfUtils.createTableDiv(jsonList, headerFont,dataFont);
 		Div trainterDetails = pdfUtils.trainerDetails();
 		Div finals = pdfUtils.juridicationDetails(dataFont);

@@ -56,9 +56,9 @@ public class SyllabusListPdfGeneratorV2 {
 		return PdfFontFactory.createFont(fontName, "UTF-8");
 	}
 
-	public Div createHeader(PdfFont headerFont, String month) {
+	public Div createHeader(PdfFont headerFont, String month,String header) {
 
-		String header = "Java Syllabus ";
+	
 
 		Div divDate = new Div();
 
@@ -192,7 +192,7 @@ public class SyllabusListPdfGeneratorV2 {
 	        Color fontColor = new DeviceRgb(0, 0, 0); // Example font color, black
 
 	       
-	        Paragraph createdByPara = new Paragraph("Created By. \nJayaram\nSoftware Developer | Chennai")
+	        Paragraph createdByPara = new Paragraph("Created By. \nJayaram\nEmail : jayaramp51096@gmail.com")
 	                .setFontSize(fontSize)
 	                .setFontColor(fontColor);
 	        createdByPara.setMarginBottom(10); // Add some space between the lines if needed

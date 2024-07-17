@@ -63,6 +63,12 @@ public class OnlineClassDetails implements Serializable {
 	@Column(name = "payment")
 	private double payment;
 
+	@Column(name = "mobile_number")
+	private long mobileNumber;
+
+	@Column(name = "email")
+	private String email;
+
 	public Long getId() {
 		return id;
 	}
@@ -157,6 +163,22 @@ public class OnlineClassDetails implements Serializable {
 
 	public void setPayment(double payment) {
 		this.payment = payment;
+	}
+
+	public long getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(long mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }

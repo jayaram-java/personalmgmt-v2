@@ -89,6 +89,9 @@ public class DepositDetails implements Serializable {
 	@Column(name = "type")
 	private String type;
 
+	@Column(name = "is_premature_closure")
+	private String isPrematureClosure;
+
 	public Long getId() {
 		return id;
 	}
@@ -255,6 +258,14 @@ public class DepositDetails implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getIsPrematureClosure() {
+		return isPrematureClosure;
+	}
+
+	public void setIsPrematureClosure(String isPrematureClosure) {
+		this.isPrematureClosure = isPrematureClosure;
 	}
 
 }

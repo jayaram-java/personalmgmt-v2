@@ -60,6 +60,13 @@ public class IncomeDetails implements Serializable {
 	@Column(name = "provident_fund")
 	private Double providentFund;
 
+	@Column(name = "income_tax")
+	private Double incomeTax;
+
+	@ManyToOne
+	@JoinColumn(name = "financial_year_id")
+	private YearMaster financialYearId;
+
 	public Long getId() {
 		return id;
 	}
@@ -138,6 +145,22 @@ public class IncomeDetails implements Serializable {
 
 	public void setProvidentFund(Double providentFund) {
 		this.providentFund = providentFund;
+	}
+
+	public Double getIncomeTax() {
+		return incomeTax;
+	}
+
+	public void setIncomeTax(Double incomeTax) {
+		this.incomeTax = incomeTax;
+	}
+
+	public YearMaster getFinancialYearId() {
+		return financialYearId;
+	}
+
+	public void setFinancialYearId(YearMaster financialYearId) {
+		this.financialYearId = financialYearId;
 	}
 
 }
