@@ -53,6 +53,15 @@ public class EmailController {
 		return response;
 	}
 	
+	@RequestMapping(value = "/emailIncludeFeature")
+	@ResponseBody
+	public boolean sendEmailWithFeature() {
+
+		boolean response = emailService.sendEmailWithTable();
+
+		return response;
+	}
+	
 	
 	
 	

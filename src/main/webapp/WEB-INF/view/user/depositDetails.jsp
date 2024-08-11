@@ -63,6 +63,47 @@ body {
 	margin-top: 30px;
 	height: 1500px; 
 }
+
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+
+.required-field::after {
+    content: "*";
+    color: red;
+}
+
+.required-field1::before {
+    content: "* ";
+    color: red;
+}
+
+
 </style>
 
 
@@ -154,6 +195,24 @@ body {
             </tr>
         </tfoot>
 		</table>
+	</div>
+	
+	
+	<div align="right">
+	
+		<button style='font-size: 24px; background-color: gray;'>
+			Deposit PDF <i class="fa fa-arrow-right" aria-hidden="true"></i>
+		</button>
+
+		&nbsp &nbsp &nbsp &nbsp 
+	
+		<div class="tooltip">
+			<button style='font-size: 24px' id="pdfcreate">
+				<i class="fa fa-file" aria-hidden="true"></i>
+			</button>
+			<span class="tooltiptext">View </span> &nbsp &nbsp &nbsp &nbsp
+		</div>
+	
 	</div>
 
 	<br>

@@ -104,7 +104,19 @@ $(document).ready(function() {
 
 	});
 	
+	$('#pdfcreate').click(function() {
+		
+	    var bankName = $("#bankName").val();
+		
+		if(bankName == "" ){
+			
+			bankName = 'SBI';
+		}
+		
+		window.open("pdf/investment/deposit/"+bankName);
 	
+	});
+
 	
 	
 	//expenseCategroyLoad();

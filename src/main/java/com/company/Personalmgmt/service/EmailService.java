@@ -19,5 +19,7 @@ public interface EmailService {
 	boolean sendEmailForScheduling();
 	
 	boolean sendEmailChecking();
+	
+	boolean sendEmailWithTable();
 
 }

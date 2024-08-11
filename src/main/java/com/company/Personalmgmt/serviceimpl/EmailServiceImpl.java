@@ -454,6 +454,86 @@ public class EmailServiceImpl implements EmailService {
 		}
 		return true;
 	}
+	
+	
+	@Override
+	public boolean sendEmailWithTable() {
+		
+	log.info("API name = *sendEmailWithTable" );
+		
+		final String subject = "Project Proposal - Vendor ";
+		
+		SecondaryUserDetails secondaryUserDetails = secondaryUserDetailsRepository.findByEmailAddress("jayaramp51096@gmail.com");
+		
+		username = secondaryUserDetails.getName();
+
+		MimeMessagePreparator preparator = new MimeMessagePreparator() {
+			public void prepare(MimeMessage mimeMessage) throws Exception {
+
+				mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress("jayaramp51096@gmail.com"));
+				mimeMessage.setFrom(new InternetAddress("jayaramdeveloper51096@gmail.com"));
+				mimeMessage.setSubject(subject);
+
+				MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+				helper.setText(
+						" <!DOCTYPEhtml> <html lang=\"en\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">     <style>         table {             width: 100%;             border-collapse: collapse;         }         th, td {             border: 1px solid black;             padding: 8px;         }         th {             background-color: lightblue;             width: 33.33%;         }         td {             width: 66.67%;             color: red;          }     </style> </head> <body>          <h3>Hi \" + username+ \",</h3>     <span style=\"color: red;\">A new request from maker</span> <br>    Functionality name :  <span style=\"color: red;\"> Menu Management</span>    <br>        <table>         <tr> <th>Sunday</th> <td>Learn new things. Online class </td> </tr><tr> <th>Monday</th><td>Online class. work- sinopac project</td>         </tr>         <tr>             <th>Tuesday</th>             <td>Online class. work- sinopac project</td>         </tr>         <tr>             <th>Wednesday</th>             <td>Online class. work- sinopac project</td>         </tr>         <tr>             <th>Thursday</th>             <td>Online class. work- sinopac project</td>         </tr>         <tr>             <th>Friday</th>   <td>Online class. work- sinopac project</td> </tr> <tr> <th>Saturday</th> <td>Learn new things. Online class </td> </tr>  </table> </body> </html> \r\n"
+						+ "",
+						true);
+				
+				ClientApplicationProposalPDFGenerator clientpdf = new ClientApplicationProposalPDFGenerator();
+				
+				HttpHeaders headers = new HttpHeaders();
+				Document document = new Document();
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				PdfWriter.getInstance(document, out);
+				
+				document.open();
+				document.addTitle("Email Table - PersonalMgmt");
+				
+				ClientCategoryMaster clientCategoryMaster = clientCategoryMasterRepository.findByName("Vendor");
+				List<ApplicationFeature> applicationFeature = applicationFeatureRepository
+						.findByClientCategoryMaster(clientCategoryMaster);
+
+				PdfPTable title = clientpdf.getTitle("Project Proposal - Vendor");
+				PdfPTable content = clientpdf.headertwo(applicationFeature);
+				PdfPTable end = clientpdf.cmpsigndtls();
+				PdfPTable finals = clientpdf.juriticationdetails();
+
+				document.add(title);
+				document.add(content);
+				document.add(end);
+				document.add(finals);
+
+				document.close();
+				
+				try {
+					headers.setContentLength(out.size());
+
+				} catch (Exception e) {
+					
+					log.info("Exception " + e);
+
+					
+					e.printStackTrace();
+				}
+
+				byte a[] = out.toByteArray();
+				
+				helper.addAttachment(subject.concat(".pdf"), new ByteArrayResource(a));
+			}
+
+		};
+
+		try {
+			mailSender.send(preparator);
+		} catch (MailException ex) {
+			log.info("MailException " + ex);
+			System.err.println(ex.getMessage());
+		}
+		
+		return true;
+	}
+
 
 	@Override
 	public boolean sendEmailForScheduling() {
@@ -549,7 +629,8 @@ public class EmailServiceImpl implements EmailService {
 		
 		return true;
 	}
-	
+
+		
 	
 
 }
