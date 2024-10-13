@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class InvestmentServiceImpl implements InvestmentService {
 	
 	@Autowired
 	DepositDetailsRepository depositDetailsRepository;
+	
+	@Autowired
+	HttpSession httpsession;
 
 	@Override
 	public Map<String, Object> getAllDepositDetails() {
@@ -41,8 +45,8 @@ public class InvestmentServiceImpl implements InvestmentService {
 
 		Map<String, Object> res = new HashMap<String, Object>();
 		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
-		long id = 1;
-		List<DepositDetails> depositDetails = depositDetailsRepository.findByUserIdAndIsActive(id, "Y");
+		long userId = (Long) httpsession.getAttribute("userId");
+		List<DepositDetails> depositDetails = depositDetailsRepository.findByUserIdAndIsActive(userId, "Y");
 
 		Double totalPrincipalAmt = 0.0;
 		Double totalMaturityAmt = 0.0;
