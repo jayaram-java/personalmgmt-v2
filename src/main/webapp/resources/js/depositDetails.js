@@ -8,6 +8,13 @@ $(document).ready(function() {
 		$loading.hide();
 	});
 	
+	$('#addDepositDetails').click(function() {
+		$("#myForm").show();
+	});
+
+	$('#refreshPage').click(function() {
+		window.location.reload();
+	});
 
 	depositDataTable();
 	

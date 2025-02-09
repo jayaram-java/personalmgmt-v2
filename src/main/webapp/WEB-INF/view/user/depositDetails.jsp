@@ -161,7 +161,12 @@ body {
 	<div class="container1">
 			<input class="button1" type="button" value="search" id="searchDepositDetails" >
 		</div>
-	
+		
+		&nbsp;
+		<div style="float: right;">
+			<input type="button" class="button" value="Add Deposit Details" id="addDepositDetails">
+		</div>
+
 	</div>
 
 	</div>
@@ -196,6 +201,66 @@ body {
         </tfoot>
 		</table>
 	</div>
+	
+			
+<div class="form-popup" id="myForm" align="center">
+    <form>
+        <div class="container">
+            <h1 align="left">Deposit Details</h1>
+            <hr>
+            <div class="row">
+                <div class="column">
+                    <label class="required-field" for="startingFrom" style="float: left;"><b>Principal Amount</b></label>
+                    <input type="text" placeholder="Enter Principal Amount" name="principalAmt" id="principalAmt" required>
+                </div>
+                <div class="column">
+                    <label class="required-field" for="fri" style="float: left;"><b>Interest Rate</b></label>
+                    <input type="text" placeholder="Enter Interest Rate" name="fri" id="fri" required>
+                </div>
+            </div>
+           	<div class="row">
+					<div class="column">
+						<label for="depositDate" style="float: left;"><b>Open Date *</b></label><br> <input
+							type="date" id="depositDate" name="depositDate" style="float: left;width: 270px;margin: 6px;height: 46px;align: left;">
+					</div>
+
+					<div class="column">
+						<label for="maturityDate" style="float: left;"><b>Maturity Date *</b></label><br> <input
+							type="date" id="maturityDate" name="maturityDate" style="float: left;width: 270px;margin: 6px;height: 46px;align: left;">
+					</div>
+
+				</div>
+           
+             <div class="row">
+            
+              <div class="column">
+                    <label class="required-field" for="remarks" style="float: left;"><b>Deposit Account Number</b></label>
+                    <input type="text" placeholder="Enter Acct no" name="depositAccNo" id="depositAccNo" required>
+                </div>
+                   <div class="column">
+                    <label class="required-field" for="remarks" style="float: left;"><b>Tenure</b></label>
+                    <input type="text" placeholder="Enter tenure" name="tenure" id="tenure" required>
+                </div>
+            </div>
+              
+       
+            <div align="left">
+                <label class="required-field1" for="phone"><b>Indicates mandatory fields</b></label>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="column">
+                    <input type="button" class="registerbtn" value="Save" id="saveDepositDetails" />
+                </div>
+                <div class="column">
+                    <button type="button" class="registerbtn" id="refreshPage">Close</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+	
+	
 	
 	
 	<div align="right">
