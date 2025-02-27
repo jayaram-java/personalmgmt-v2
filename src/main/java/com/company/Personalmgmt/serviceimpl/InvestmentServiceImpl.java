@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,9 +19,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.company.Personalmgmt.dto.DepositAccountDetailsDto;
 import com.company.Personalmgmt.model.DepositDetails;
+import com.company.Personalmgmt.model.User;
 import com.company.Personalmgmt.repository.DepositDetailsRepository;
+import com.company.Personalmgmt.repository.UserRepository;
 import com.company.Personalmgmt.service.InvestmentService;
+import com.company.Personalmgmt.utils.CommonUtils;
 
 /**
 * This class is used for 
@@ -34,6 +39,9 @@ public class InvestmentServiceImpl implements InvestmentService {
 	
 	@Autowired
 	DepositDetailsRepository depositDetailsRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	@Autowired
 	HttpSession httpsession;
@@ -249,6 +257,49 @@ public class InvestmentServiceImpl implements InvestmentService {
 		res.put("Summary", summary);
 
 		return res;
+	}
+
+	@Override
+	public boolean saveDepositDetails(DepositAccountDetailsDto depositAccountDetailsDto) {
+
+		log.info("API name = *saveDepositDetails");
+
+		try {
+
+			long userId = 14;
+
+			Optional<User> user = userRepository.findById(userId);
+
+			if (depositAccountDetailsDto.getId() == null) {
+
+				DepositDetails depositDetails = new DepositDetails();
+
+				depositDetails.setBankName("SBI");
+				depositDetails.setDepositAccNo(depositAccountDetailsDto.getAccountNumber());
+				depositDetails.setDepositDate(depositAccountDetailsDto.getOpeningDate());
+				depositDetails.setFri(depositAccountDetailsDto.getInterestRate());
+				depositDetails.setInterestAmt(depositAccountDetailsDto.getInterestAmount());
+				depositDetails.setIsActive("Y");
+				depositDetails.setMaturityAmt(depositAccountDetailsDto.getMaturityAmount());
+				depositDetails.setMaturityDate(depositAccountDetailsDto.getMaturityDate());
+				depositDetails.setUser(user.get());
+
+				long tenureInDays = CommonUtils.calculateTenureInDays(depositAccountDetailsDto.getOpeningDate(),
+						depositAccountDetailsDto.getMaturityDate());
+
+				depositDetails.setTenure((int) tenureInDays);
+
+				depositDetailsRepository.save(depositDetails);
+
+			} else {
+
+			}
+
+		} catch (Exception e) {
+			log.info("ParseException " + e);
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 }

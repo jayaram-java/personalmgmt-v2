@@ -31,6 +31,18 @@
 
 </head>
 <style>
+
+select {
+    width: 280px;
+    height: 34px;
+    float: left;
+    margin: 1px;
+}
+    select:focus {
+        min-width: 280px;
+        width: auto;
+    }
+    
 body {
 	margin: 0;
 }
@@ -238,8 +250,12 @@ body {
                     <input type="text" placeholder="Enter Acct no" name="depositAccNo" id="depositAccNo" required>
                 </div>
                    <div class="column">
-                    <label class="required-field" for="remarks" style="float: left;"><b>Tenure</b></label>
-                    <input type="text" placeholder="Enter tenure" name="tenure" id="tenure" required>
+                   <label class="required-field" for="parent" style="float: left;"><b>Bank </b></label><br>
+						<br> <select name="bank" id="bank">
+							<option value="">Select</option>
+							<option value="SBI">SBI</option>
+							<option value="ICICI">ICICI</option>
+						</select>
                 </div>
             </div>
               
