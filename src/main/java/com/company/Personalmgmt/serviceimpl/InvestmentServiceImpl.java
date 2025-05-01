@@ -3,8 +3,11 @@
  */
 package com.company.Personalmgmt.serviceimpl;
 
+import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,31 +21,37 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.company.Personalmgmt.dto.DepositAccountDetailsDto;
 import com.company.Personalmgmt.model.DepositDetails;
+import com.company.Personalmgmt.model.FixedDepositDetails;
 import com.company.Personalmgmt.model.User;
 import com.company.Personalmgmt.repository.DepositDetailsRepository;
+import com.company.Personalmgmt.repository.FixedDepositRepository;
 import com.company.Personalmgmt.repository.UserRepository;
 import com.company.Personalmgmt.service.InvestmentService;
 import com.company.Personalmgmt.utils.CommonUtils;
 
 /**
-* This class is used for 
-*
-* @author Jayaram
-*/
+ * This class is used for
+ *
+ * @author Jayaram
+ */
 @Service
 public class InvestmentServiceImpl implements InvestmentService {
-	
+
 	private static final org.slf4j.Logger log = LoggerFactory.getLogger(InvestmentServiceImpl.class);
-	
+
 	@Autowired
 	DepositDetailsRepository depositDetailsRepository;
-	
+
+	@Autowired
+	FixedDepositRepository fixedDepositRepository;
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	HttpSession httpsession;
 
@@ -76,19 +85,17 @@ public class InvestmentServiceImpl implements InvestmentService {
 				ob.put("InterestAmt", depositDetail.getInterestAmt());
 				ob.put("MaturityAmount", depositDetail.getMaturityAmt());
 				ob.put("MaturityDate", depositDetail.getMaturityDate());
-				
+
 				String maturityDate[] = depositDetail.getMaturityDate().split("-");
-				
+
 				String sort = maturityDate[2].concat(maturityDate[1]).concat(maturityDate[0]);
-				
+
 				ob.put("MaturityDateBased", sort);
 
 				totalPrincipalAmt = totalPrincipalAmt + depositDetail.getPrincipalAmt();
 				totalMaturityAmt = totalMaturityAmt + depositDetail.getMaturityAmt();
 				response.add(ob);
 			}
-			
-			
 
 		} catch (Exception e) {
 			log.error("Exception " + e);
@@ -101,16 +108,15 @@ public class InvestmentServiceImpl implements InvestmentService {
 		Map<String, Object> summary = new HashMap<String, Object>();
 		summary.put("TotalPrincipalAmt", totalPrincipalAmt);
 		summary.put("TotalMaturityAmt", totalMaturityAmt);
-		
+
 		List<Map<String, Object>> finalResponse = sortBasedOnMaturityDate(response);
 
 		res.put("DepositDetails", finalResponse);
 		res.put("Summary", summary);
 
 		return res;
-	}	
-	
-	
+	}
+
 	public static List<Map<String, Object>> sortBasedOnMaturityDate(List<Map<String, Object>> depositDetails) {
 		Collections.sort(depositDetails, new Comparator<Map<String, Object>>() {
 
@@ -123,7 +129,6 @@ public class InvestmentServiceImpl implements InvestmentService {
 		});
 		return depositDetails;
 	}
-
 
 	@Override
 	public Map<String, Object> getDepositDetailsById(String accountNo) {
@@ -186,7 +191,6 @@ public class InvestmentServiceImpl implements InvestmentService {
 		return res;
 	}
 
-
 	@Override
 	public Map<String, Object> getDepositDetails(String year, String bankName) {
 		log.info("API name = *getDepositDetails");
@@ -194,16 +198,14 @@ public class InvestmentServiceImpl implements InvestmentService {
 		Map<String, Object> res = new HashMap<String, Object>();
 		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
 		long id = 1;
-		
-		List<DepositDetails> depositDetails  = null;
-		
+
+		List<DepositDetails> depositDetails = null;
+
 		if (year.equals("9999")) {
 			depositDetails = depositDetailsRepository.findByBankNameAndIsActive(bankName, "Y");
 		} else {
 			depositDetails = depositDetailsRepository.findByYearMasterYearAndBankNameAndIsActive(year, bankName, "Y");
 		}
-		
-		
 
 		Double totalPrincipalAmt = 0.0;
 		Double totalMaturityAmt = 0.0;
@@ -225,19 +227,17 @@ public class InvestmentServiceImpl implements InvestmentService {
 				ob.put("InterestAmt", depositDetail.getInterestAmt());
 				ob.put("MaturityAmount", depositDetail.getMaturityAmt());
 				ob.put("MaturityDate", depositDetail.getMaturityDate());
-				
+
 				String maturityDate[] = depositDetail.getMaturityDate().split("-");
-				
+
 				String sort = maturityDate[2].concat(maturityDate[1]).concat(maturityDate[0]);
-				
+
 				ob.put("MaturityDateBased", sort);
 
 				totalPrincipalAmt = totalPrincipalAmt + depositDetail.getPrincipalAmt();
 				totalMaturityAmt = totalMaturityAmt + depositDetail.getMaturityAmt();
 				response.add(ob);
 			}
-			
-			
 
 		} catch (Exception e) {
 			log.error("Exception " + e);
@@ -250,7 +250,7 @@ public class InvestmentServiceImpl implements InvestmentService {
 		Map<String, Object> summary = new HashMap<String, Object>();
 		summary.put("TotalPrincipalAmt", totalPrincipalAmt);
 		summary.put("TotalMaturityAmt", totalMaturityAmt);
-		
+
 		List<Map<String, Object>> finalResponse = sortBasedOnMaturityDate(response);
 
 		res.put("DepositDetails", finalResponse);
@@ -260,6 +260,7 @@ public class InvestmentServiceImpl implements InvestmentService {
 	}
 
 	@Override
+	@Transactional
 	public boolean saveDepositDetails(DepositAccountDetailsDto depositAccountDetailsDto) {
 
 		log.info("API name = *saveDepositDetails");
@@ -272,24 +273,56 @@ public class InvestmentServiceImpl implements InvestmentService {
 
 			if (depositAccountDetailsDto.getId() == null) {
 
-				DepositDetails depositDetails = new DepositDetails();
+				FixedDepositDetails depositDetails = new FixedDepositDetails();
 
-				depositDetails.setBankName("SBI");
-				depositDetails.setDepositAccNo(depositAccountDetailsDto.getAccountNumber());
-				depositDetails.setDepositDate(depositAccountDetailsDto.getOpeningDate());
-				depositDetails.setFri(depositAccountDetailsDto.getInterestRate());
-				depositDetails.setInterestAmt(depositAccountDetailsDto.getInterestAmount());
-				depositDetails.setIsActive("Y");
-				depositDetails.setMaturityAmt(depositAccountDetailsDto.getMaturityAmount());
-				depositDetails.setMaturityDate(depositAccountDetailsDto.getMaturityDate());
+				double principalAmount = depositAccountDetailsDto.getPrincipalAmount();
+				double interestRate = depositAccountDetailsDto.getInterestRate();
+
+				depositDetails.setBankName(depositAccountDetailsDto.getBankName());
+				depositDetails.setDepositAccountNo(depositAccountDetailsDto.getAccountNumber());
+				depositDetails
+						.setDepositDate(CommonUtils.convertStringToDate(depositAccountDetailsDto.getOpeningDate()));
+				depositDetails.setFixedInterestRate(BigDecimal.valueOf(interestRate));
+				
+				depositDetails.setRemark(depositAccountDetailsDto.getRemark());
+				depositDetails.setNomineeName(depositAccountDetailsDto.getNomineeName());
+
+				depositDetails.setIsActive(true);
+
+				depositDetails
+						.setMaturityDate(CommonUtils.convertStringToDate(depositAccountDetailsDto.getMaturityDate()));
+				depositDetails.setPrincipalAmount(BigDecimal.valueOf(principalAmount));
 				depositDetails.setUser(user.get());
+
+				LocalDate openingDate = LocalDate.parse(depositAccountDetailsDto.getOpeningDate());
+				LocalDate maturityDate = LocalDate.parse(depositAccountDetailsDto.getMaturityDate());
+
+				long daysBetween = ChronoUnit.DAYS.between(openingDate, maturityDate);
+				double timeInYears = daysBetween / 365.0;
+
+				double annualRate = interestRate / 100; // convert to decimal
+				int compoundingPerYear = 4; // quarterly
+			     
+
+			//	double maturityAmount = principalAmount * Math.pow((1 + interestRate / 100), timeInYears);
+				 double maturityAmount = principalAmount * Math.pow( 1 + (annualRate / compoundingPerYear), compoundingPerYear * timeInYears );
+				double interest = maturityAmount - principalAmount;
+				
+				
+				depositDetails.setMaturityAmount(BigDecimal.valueOf(maturityAmount));
+				depositDetails.setInterestAmount(BigDecimal.valueOf(interest));
+				
+				
+				System.out.println(depositDetails.toString());
+
+				CommonUtils.convertStringToDate(depositAccountDetailsDto.getOpeningDate());
 
 				long tenureInDays = CommonUtils.calculateTenureInDays(depositAccountDetailsDto.getOpeningDate(),
 						depositAccountDetailsDto.getMaturityDate());
 
-				depositDetails.setTenure((int) tenureInDays);
+				depositDetails.setTenureDays((int) tenureInDays);
 
-				depositDetailsRepository.save(depositDetails);
+				fixedDepositRepository.save(depositDetails);
 
 			} else {
 

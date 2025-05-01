@@ -7,11 +7,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.company.Personalmgmt.dto.DepositAccountDetailsDto;
 import com.company.Personalmgmt.dto.KeyNotesDto;
 import com.company.Personalmgmt.service.InvestmentService;
 
@@ -55,6 +57,15 @@ public class InvestmentController {
 		System.out.println("depositDetials = "+ depositDetials);
 
 		return depositDetials;
+	}
+	
+	@RequestMapping(value = "/saveDepositDetails", method = { RequestMethod.POST, RequestMethod.GET })
+	@ResponseBody
+	public boolean saveDepositDetails(@RequestBody DepositAccountDetailsDto depositAccountDetailsDto) {
+
+		boolean response = investmentService.saveDepositDetails(depositAccountDetailsDto);
+
+		return response;
 	}
 	
 	

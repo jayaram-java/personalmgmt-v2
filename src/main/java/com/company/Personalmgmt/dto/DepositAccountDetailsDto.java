@@ -22,6 +22,8 @@ public class DepositAccountDetailsDto {
 	private Double taxAmount;
 	private Integer tenureInMonths;
 	private String bankName;
+	private String remark;
+	private String nomineeName;
 
 	public Long getId() {
 		return id;
@@ -109,6 +111,22 @@ public class DepositAccountDetailsDto {
 
 	public void setBankName(String bankName) {
 		this.bankName = bankName;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getNomineeName() {
+		return nomineeName;
+	}
+
+	public void setNomineeName(String nomineeName) {
+		this.nomineeName = nomineeName;
 	}
 
 }

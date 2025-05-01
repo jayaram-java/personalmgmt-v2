@@ -258,6 +258,17 @@ body {
 						</select>
                 </div>
             </div>
+            
+              <div class="row">
+                <div class="column">
+                    <label class="required-field" for="startingFrom" style="float: left;"><b>Nominee Name</b></label>
+                    <input type="text" placeholder="Enter Nominee Name" name="nomineeName" id="nomineeName" required>
+                </div>
+                <div class="column">
+                    <label class="required-field" for="fri" style="float: left;"><b>Remark</b></label>
+                    <input type="text" placeholder="Enter Remark" name="remark" id="remark" required>
+                </div>
+            </div>
               
        
             <div align="left">
