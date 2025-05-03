@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.company.Personalmgmt.dto.DepositAccountDetailsDto;
-import com.company.Personalmgmt.dto.KeyNotesDto;
+import com.company.Personalmgmt.service.DepositService;
 import com.company.Personalmgmt.service.InvestmentService;
 
 /**
@@ -29,12 +29,15 @@ public class InvestmentController {
 
 	@Autowired
 	InvestmentService investmentService;
+	
+	@Autowired
+	DepositService depositService;
 
 	@RequestMapping(value = "/getAllDetails", method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
 	public Map<String, Object> getAllDepositDetails() {
 
-		Map<String, Object> depositDetials = investmentService.getAllDepositDetails();
+		Map<String, Object> depositDetials = depositService.getAllDepositDetails();
 
 		return depositDetials;
 	}
@@ -63,7 +66,7 @@ public class InvestmentController {
 	@ResponseBody
 	public boolean saveDepositDetails(@RequestBody DepositAccountDetailsDto depositAccountDetailsDto) {
 
-		boolean response = investmentService.saveDepositDetails(depositAccountDetailsDto);
+		boolean response = depositService.saveDepositDetails(depositAccountDetailsDto);
 
 		return response;
 	}

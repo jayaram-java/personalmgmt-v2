@@ -45,5 +45,17 @@ public class CommonUtils {
 		}
 		return dateTime;
 	}
+	
+	
+	public static String convertDateToString(LocalDateTime dateTime) {
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String formattedDate = dateTime.format(formatter);
+
+		return formattedDate;
+	}
+	
+	
+	
 
 }

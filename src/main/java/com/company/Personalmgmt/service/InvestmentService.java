@@ -21,6 +21,4 @@ public interface InvestmentService {
 
 	Map<String, Object> getDepositDetails(String year, String bankName);
 
-	boolean saveDepositDetails(DepositAccountDetailsDto depositAccountDetailsDto);
-
 }
