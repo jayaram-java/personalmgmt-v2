@@ -24,6 +24,17 @@ public class DepositAccountDetailsDto {
 	private String bankName;
 	private String remark;
 	private String nomineeName;
+	
+	
+
+	@Override
+	public String toString() {
+		return "DepositAccountDetailsDto [id=" + id + ", accountNumber=" + accountNumber + ", principalAmount="
+				+ principalAmount + ", interestRate=" + interestRate + ", openingDate=" + openingDate
+				+ ", maturityDate=" + maturityDate + ", maturityAmount=" + maturityAmount + ", interestAmount="
+				+ interestAmount + ", taxAmount=" + taxAmount + ", tenureInMonths=" + tenureInMonths + ", bankName="
+				+ bankName + ", remark=" + remark + ", nomineeName=" + nomineeName + "]";
+	}
 
 	public Long getId() {
 		return id;

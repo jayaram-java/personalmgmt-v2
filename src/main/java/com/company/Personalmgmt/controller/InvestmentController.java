@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.company.Personalmgmt.dto.DepositAccountDetailsDto;
+import com.company.Personalmgmt.dto.KeyNotesDto;
 import com.company.Personalmgmt.service.DepositService;
 import com.company.Personalmgmt.service.InvestmentService;
 
@@ -69,6 +70,15 @@ public class InvestmentController {
 		boolean response = depositService.saveDepositDetails(depositAccountDetailsDto);
 
 		return response;
+	}
+	
+	@RequestMapping(value = "/getDepositDetailsFromId", method = { RequestMethod.POST, RequestMethod.GET })
+	@ResponseBody
+	public DepositAccountDetailsDto getDepositDetailsFromId(@RequestParam Long id) {
+
+		DepositAccountDetailsDto depositAccountDetailsDto = depositService.getDepositDetailsFromId(id);
+
+		return depositAccountDetailsDto;
 	}
 	
 	

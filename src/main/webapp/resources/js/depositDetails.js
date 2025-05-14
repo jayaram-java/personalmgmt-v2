@@ -141,6 +141,7 @@ $(document).ready(function () {
         if (accountNumber != "" && accountNumber != null && principalAmount != "" && principalAmount != null) {
 
             var depositAccountDetailsDto = {
+				"id":id,
                 "accountNumber": accountNumber,
                 "principalAmount": principalAmount,
                 "interestRate": interestRate,
@@ -151,51 +152,99 @@ $(document).ready(function () {
                 "remark": remark
             }
 
-            $.ajax({
-                url: "investment/saveDepositDetails",
-                type: "POST",
-                dataType: 'json',
-                contentType: "application/json",
-                data: JSON.stringify(depositAccountDetailsDto),
+            if (id == "") {
 
-                success: function (data) {
+                $.ajax({
+                    url: "investment/saveDepositDetails",
+                    type: "POST",
+                    dataType: 'json',
+                    contentType: "application/json",
+                    data: JSON.stringify(depositAccountDetailsDto),
 
-                    if (data == true) {
-                        swal({
-                            title: "",
-                            text: "Save Successfully.",
-                            type: "success",
-                            confirmButtonColor: '#DD6B55',
-                            confirmButtonText: 'Ok',
+                    success: function (data) {
+
+                        if (data == true) {
+                            swal({
+                                title: "",
+                                text: "Save Successfully.",
+                                type: "success",
+                                confirmButtonColor: '#DD6B55',
+                                confirmButtonText: 'Ok',
 
 
-                        }, function (isConfirm) {
+                            }, function (isConfirm) {
 
-                            if (isConfirm) {
+                                if (isConfirm) {
 
-                                window.location.reload();
-                            } else {
+                                    window.location.reload();
+                                } else {
 
-                            }
-                        });
+                                }
+                            });
+                        }
+                        else {
+
+                            swal({
+                                title: "",
+                                text: "Not Save",
+                                type: "warning",
+                            });
+                        }
+                    },
+
+                    error: function (error) {
+
+                        alert("something wrong");
+
                     }
-                    else {
+                });
 
-                        swal({
-                            title: "",
-                            text: "Not Save",
-                            type: "warning",
-                        });
+            } else {
+                $.ajax({
+                    url: "investment/saveDepositDetails",
+                    type: "POST",
+                    dataType: 'json',
+                    contentType: "application/json",
+                    data: JSON.stringify(depositAccountDetailsDto),
+
+                    success: function (data) {
+
+                        if (data == true) {
+                            swal({
+                                title: "",
+                                text: "Update Successfully.",
+                                type: "success",
+                                confirmButtonColor: '#DD6B55',
+                                confirmButtonText: 'Ok',
+
+
+                            }, function (isConfirm) {
+
+                                if (isConfirm) {
+
+                                    window.location.reload();
+                                } else {
+
+                                }
+                            });
+                        }
+                        else {
+
+                            swal({
+                                title: "",
+                                text: "Not Update",
+                                type: "warning",
+                            });
+                        }
+                    },
+
+                    error: function (error) {
+
+                        alert("something wrong");
+
                     }
-                },
-
-                error: function (error) {
-
-                    alert("something wrong");
-
-                }
-            });
-
+                });
+            }
 
         }
         else {
@@ -207,9 +256,6 @@ $(document).ready(function () {
 
         }
     });
-
-
-
     //expenseCategroyLoad();
 });
 
@@ -267,7 +313,13 @@ function depositDataTable() {
             },
             {
                 "data": "MaturityDate"
-            }
+            },
+            {
+				'mRender': function(data, type, row, meta) {
+					var id = row.id;
+					return '<a href="#" type="buttonclick" class="button" onclick="getbyID(' + id + ')">Edit</a>';
+				}
+			}
         ],
 
 
@@ -308,7 +360,37 @@ function depositDataTable() {
     });
 }
 
+function getbyID(id) {
 
+	$("#depositid").val(id);
+
+	$.ajax({
+		url: "investment/getDepositDetailsFromId",
+		type: "GET",
+		data: {
+			'id': id,
+		},
+		success: function(data) {
+
+			$("#depositAccNo").val(data.accountNumber);
+			$("#principalAmt").val(data.principalAmount);
+			$("#fri").val(data.interestRate);
+			$("#depositDate").val(data.openingDate);
+			$("#maturityDate").val(data.maturityDate);
+			$("#bank").val(data.bankName);
+            $("#nomineeName").val(data.nomineeName);
+			$("#remark").val(data.remark);
+
+
+			$("#saveDepositDetails").val("Update");
+
+			$("#myForm").show();
+
+		}
+	});
+
+
+}
 
 
 function sumAmount(sum) {

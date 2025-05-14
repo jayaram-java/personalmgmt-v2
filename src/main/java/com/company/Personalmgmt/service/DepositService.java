@@ -18,4 +18,8 @@ public interface DepositService {
 	Map<String, Object> getAllDepositDetails();
 
 	boolean saveDepositDetails(DepositAccountDetailsDto depositAccountDetailsDto);
+	
+	DepositAccountDetailsDto getDepositDetailsFromId(Long id);
+	
+	
 }

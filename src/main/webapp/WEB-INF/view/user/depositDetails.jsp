@@ -198,6 +198,7 @@ body {
 					<th>MaturityAmount</th>
 					<th>OpenDate</th>
 					<th>MaturityDate</th>
+					<th>Edit</th> 
 				</tr>
 			</thead>
 			  <tfoot>
@@ -208,6 +209,7 @@ body {
                <th></th>
                <th></th>
                 <th></th>
+				<th></th>
               
             </tr>
         </tfoot>
@@ -311,7 +313,7 @@ body {
 	<br>
 	<br>
 	
-	<input type="hidden" id="propertyid"> </section>
+	<input type="hidden" id="depositid"> </section>
 	<div id="loading"
 		style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: rgb(102, 102, 102); z-index: 30001; opacity: 0.8;">
 		<p style="position: absolute; color: White; top: 50%; left: 45%;">

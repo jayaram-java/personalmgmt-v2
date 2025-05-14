@@ -4,6 +4,7 @@
 package com.company.Personalmgmt.serviceimpl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,10 +16,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.DoubleAdder;
+import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,29 +55,29 @@ public class DepositServiceImpl implements DepositService{
 	@Autowired
 	HttpSession httpsession;
 
+	
+	
 	@Override
 	public Map<String, Object> getAllDepositDetails() {
-		
+
 		log.info("API name = *getAllDepositDetails");
 
-		Map<String, Object> res = new HashMap<String, Object>();
-		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+		Map<String, Object> res = new HashMap<>();
+		List<Map<String, Object>> response = new ArrayList<>();
 		long userId = (Long) httpsession.getAttribute("userId");
 		List<FixedDepositDetails> depositDetails = fixedDepositRepository.findByUserIdAndIsActive(userId, true);
-		
-		log.info("DEPOSIT RESPONSE = "+depositDetails.toString());
 
-		Double totalPrincipalAmt = 0.0;
-		Double totalMaturityAmt = 0.0;
+		log.info("DEPOSIT RESPONSE = " + depositDetails);
+
+		DoubleAdder totalPrincipalAmt = new DoubleAdder();
+		DoubleAdder totalMaturityAmt = new DoubleAdder();
 
 		LocalDateTime startTime = LocalDateTime.now();
-		
+
 		try {
-
-			for (FixedDepositDetails depositDetail : depositDetails) {
-
-				Map<String, Object> ob = new HashMap<String, Object>();
-
+			response = depositDetails.stream().map(depositDetail -> {
+				Map<String, Object> ob = new HashMap<>();
+				ob.put("id", depositDetail.getDepositId());
 				ob.put("AccountNumber", depositDetail.getDepositAccountNo());
 				ob.put("BankName", depositDetail.getBankName());
 				ob.put("OpenDate", CommonUtils.convertDateToString(depositDetail.getDepositDate()));
@@ -82,31 +87,30 @@ public class DepositServiceImpl implements DepositService{
 				ob.put("InterestAmt", depositDetail.getInterestAmount());
 				ob.put("MaturityAmount", depositDetail.getMaturityAmount());
 				ob.put("MaturityDate", CommonUtils.convertDateToString(depositDetail.getMaturityDate()));
-				
-			    String maturity =	CommonUtils.convertDateToString(depositDetail.getMaturityDate());
 
-				String maturityDate[] = maturity.split("-");
+				String maturity = CommonUtils.convertDateToString(depositDetail.getMaturityDate());
+				String[] maturityDate = maturity.split("-");
+				String sort = maturityDate[2] + maturityDate[1] + maturityDate[0];
+				ob.put("MaturityDateBased", sort);
 
-				String sort = maturityDate[2].concat(maturityDate[1]).concat(maturityDate[0]);
+				// Add to totals
+				totalPrincipalAmt.add(depositDetail.getPrincipalAmount().doubleValue());
+				totalMaturityAmt.add(depositDetail.getMaturityAmount().doubleValue());
 
-				ob.put("MaturityDateBased", "");
-
-				totalPrincipalAmt = totalPrincipalAmt + depositDetail.getPrincipalAmount().doubleValue();
-				totalMaturityAmt = totalMaturityAmt + depositDetail.getMaturityAmount().doubleValue();
-				response.add(ob);
-			}
+				return ob;
+			}).collect(Collectors.toList());
 
 		} catch (Exception e) {
-			log.error("Exception " + e);
+			log.error("Exception ", e);
 		} finally {
 			LocalDateTime endTime = LocalDateTime.now();
 			Duration latency = Duration.between(startTime, endTime);
 			log.info("API | *getAllDepositDetails | latency = " + latency);
 		}
 
-		Map<String, Object> summary = new HashMap<String, Object>();
-		summary.put("TotalPrincipalAmt", totalPrincipalAmt);
-		summary.put("TotalMaturityAmt", totalMaturityAmt);
+		Map<String, Object> summary = new HashMap<>();
+		summary.put("TotalPrincipalAmt", totalPrincipalAmt.doubleValue());
+		summary.put("TotalMaturityAmt", totalMaturityAmt.doubleValue());
 
 		List<Map<String, Object>> finalResponse = sortBasedOnMaturityDate(response);
 
@@ -114,8 +118,9 @@ public class DepositServiceImpl implements DepositService{
 		res.put("Summary", summary);
 
 		return res;
-	
 	}
+
+
 	
 	public static List<Map<String, Object>> sortBasedOnMaturityDate(List<Map<String, Object>> depositDetails) {
 		Collections.sort(depositDetails, new Comparator<Map<String, Object>>() {
@@ -133,79 +138,115 @@ public class DepositServiceImpl implements DepositService{
 
 	@Override
 	@Transactional
-	public boolean saveDepositDetails(DepositAccountDetailsDto depositAccountDetailsDto) {
+	public boolean saveDepositDetails(DepositAccountDetailsDto dto) {
+	    log.info("API name = *saveDepositDetails");
 
-		log.info("API name = *saveDepositDetails");
+	    try {
+	        Long userId = (Long) httpsession.getAttribute("userId");
+	        if (userId == null) {
+	            log.error("User ID not found in session.");
+	            return false;
+	        }
 
+	        User user = userRepository.findById(userId)
+	                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+
+	        FixedDepositDetails depositDetails = dto.getId() == null
+	                ? new FixedDepositDetails()
+	                : fixedDepositRepository.findById(dto.getId())
+	                    .orElseThrow(() -> new EntityNotFoundException("Deposit not found with ID: " + dto.getId()));
+	        
+	        System.out.println("Part 1 "+depositDetails.toString());
+
+	        populateDepositDetails(depositDetails, dto, user);
+	        
+	        System.out.println("Part 3 "+depositDetails.toString());
+
+	        fixedDepositRepository.save(depositDetails);
+	        return true;
+
+	    } catch (Exception e) {
+	        log.error("Error occurred while saving deposit details", e);
+	        return false;
+	    }
+	}
+	
+	private void populateDepositDetails(FixedDepositDetails depositDetails, DepositAccountDetailsDto dto, User user) {
+		
+		System.out.println("Dto = "+dto.toString());
+		
+		 int compoundingPerYear = 4; // Quarterly
+		BigDecimal principal = BigDecimal.valueOf(dto.getPrincipalAmount());
+		BigDecimal rate = BigDecimal.valueOf(dto.getInterestRate()).divide(BigDecimal.valueOf(100));
+		BigDecimal compoundFactor = rate.divide(BigDecimal.valueOf(compoundingPerYear), 10, RoundingMode.HALF_EVEN);
+	   
+
+	    LocalDate openingDate = LocalDate.parse(dto.getOpeningDate());
+	    LocalDate maturityDate = LocalDate.parse(dto.getMaturityDate());
+
+	    long daysBetween = ChronoUnit.DAYS.between(openingDate, maturityDate);
+	    double timeInYears = daysBetween / 365.0;
+	    
+	    BigDecimal maturityAmount = principal.multiply( BigDecimal.ONE.add(compoundFactor).pow(compoundingPerYear * (int)timeInYears));
+
+	   // double maturityAmount = principalAmount * Math.pow(1 + (annualRate / compoundingPerYear), compoundingPerYear * timeInYears);
+	    BigDecimal interest = maturityAmount.subtract(principal) ;
+
+	    depositDetails.setBankName(dto.getBankName());
+	    depositDetails.setDepositAccountNo(dto.getAccountNumber());
+	    depositDetails.setDepositDate(CommonUtils.convertStringToDate(dto.getOpeningDate()));
+	    depositDetails.setMaturityDate(CommonUtils.convertStringToDate(dto.getMaturityDate()));
+	    depositDetails.setFixedInterestRate(BigDecimal.valueOf(dto.getInterestRate()));
+	    depositDetails.setPrincipalAmount(principal);
+	    depositDetails.setMaturityAmount(maturityAmount);
+	    depositDetails.setInterestAmount(interest);
+	    depositDetails.setRemark(dto.getRemark());
+	    depositDetails.setNomineeName(dto.getNomineeName());
+	    depositDetails.setIsActive(true);
+	    depositDetails.setUser(user);
+
+	    int tenureDays = (int) CommonUtils.calculateTenureInDays(dto.getOpeningDate(), dto.getMaturityDate());
+	    depositDetails.setTenureDays(tenureDays);
+	    
+	    System.out.println("Part 2 "+depositDetails.toString());
+
+	    log.debug("Populated deposit details: {}", depositDetails);
+	}
+
+
+
+	@Override
+	public DepositAccountDetailsDto getDepositDetailsFromId(Long id) {
+
+		DepositAccountDetailsDto depositAccountDetailsDto = new DepositAccountDetailsDto();
+
+		log.info("API name = *getDepositDetailsFromId");
+		LocalDateTime startTime = LocalDateTime.now();
 		try {
 
-			long userId =  (Long) httpsession.getAttribute("userId");
-
-			Optional<User> user = userRepository.findById(userId);
-
-			if (depositAccountDetailsDto.getId() == null) {
-
-				FixedDepositDetails depositDetails = new FixedDepositDetails();
-
-				double principalAmount = depositAccountDetailsDto.getPrincipalAmount();
-				double interestRate = depositAccountDetailsDto.getInterestRate();
-
-				depositDetails.setBankName(depositAccountDetailsDto.getBankName());
-				depositDetails.setDepositAccountNo(depositAccountDetailsDto.getAccountNumber());
-				depositDetails
-						.setDepositDate(CommonUtils.convertStringToDate(depositAccountDetailsDto.getOpeningDate()));
-				depositDetails.setFixedInterestRate(BigDecimal.valueOf(interestRate));
-				
-				depositDetails.setRemark(depositAccountDetailsDto.getRemark());
-				depositDetails.setNomineeName(depositAccountDetailsDto.getNomineeName());
-
-				depositDetails.setIsActive(true);
-
-				depositDetails
-						.setMaturityDate(CommonUtils.convertStringToDate(depositAccountDetailsDto.getMaturityDate()));
-				depositDetails.setPrincipalAmount(BigDecimal.valueOf(principalAmount));
-				depositDetails.setUser(user.get());
-
-				LocalDate openingDate = LocalDate.parse(depositAccountDetailsDto.getOpeningDate());
-				LocalDate maturityDate = LocalDate.parse(depositAccountDetailsDto.getMaturityDate());
-
-				long daysBetween = ChronoUnit.DAYS.between(openingDate, maturityDate);
-				double timeInYears = daysBetween / 365.0;
-
-				double annualRate = interestRate / 100; // convert to decimal
-				int compoundingPerYear = 4; // quarterly
-			     
-
-			//	double maturityAmount = principalAmount * Math.pow((1 + interestRate / 100), timeInYears);
-				 double maturityAmount = principalAmount * Math.pow( 1 + (annualRate / compoundingPerYear), compoundingPerYear * timeInYears );
-				double interest = maturityAmount - principalAmount;
-				
-				
-				depositDetails.setMaturityAmount(BigDecimal.valueOf(maturityAmount));
-				depositDetails.setInterestAmount(BigDecimal.valueOf(interest));
-				
-				
-				System.out.println(depositDetails.toString());
-
-				CommonUtils.convertStringToDate(depositAccountDetailsDto.getOpeningDate());
-
-				long tenureInDays = CommonUtils.calculateTenureInDays(depositAccountDetailsDto.getOpeningDate(),
-						depositAccountDetailsDto.getMaturityDate());
-
-				depositDetails.setTenureDays((int) tenureInDays);
-
-				fixedDepositRepository.save(depositDetails);
-
-			} else {
-
-			}
+			Optional<FixedDepositDetails> fixedDepositDetails = fixedDepositRepository.findById((long) id);
+			BeanUtils.copyProperties(fixedDepositDetails.get(), depositAccountDetailsDto);
+			depositAccountDetailsDto.setMaturityDate(CommonUtils.convertDateToString(fixedDepositDetails.get().getMaturityDate()));
+			depositAccountDetailsDto.setOpeningDate(CommonUtils.convertDateToString(fixedDepositDetails.get().getDepositDate()));
+			
+			depositAccountDetailsDto.setAccountNumber(fixedDepositDetails.get().getDepositAccountNo());
+			depositAccountDetailsDto.setPrincipalAmount(fixedDepositDetails.get().getPrincipalAmount().doubleValue());
+			depositAccountDetailsDto.setInterestRate(fixedDepositDetails.get().getFixedInterestRate().doubleValue());
+			depositAccountDetailsDto.setMaturityAmount(fixedDepositDetails.get().getMaturityAmount().doubleValue());
+			depositAccountDetailsDto.setInterestAmount(fixedDepositDetails.get().getInterestAmount().doubleValue());
+			depositAccountDetailsDto.setTaxAmount(fixedDepositDetails.get().getTaxAmount().doubleValue());
+			depositAccountDetailsDto.setTenureInMonths(fixedDepositDetails.get().getTenureDays());
 
 		} catch (Exception e) {
-			log.info("ParseException " + e);
-			e.printStackTrace();
+			log.error("Exception " + e);
+		} finally {
+			LocalDateTime endTime = LocalDateTime.now();
+			Duration latency = Duration.between(startTime, endTime);
+			log.info("API | *getDepositDetailsFromId | latency = " + latency + " | output = "+ depositAccountDetailsDto.toString());
 		}
-		return true;
+		return depositAccountDetailsDto;
 	}
+
 
 
 }
