@@ -20,5 +20,7 @@ import com.company.Personalmgmt.model.FixedDepositDetails;
 public interface FixedDepositRepository extends JpaRepository<FixedDepositDetails, Long> {
 
 	List<FixedDepositDetails> findByUserIdAndIsActive(long id, boolean status);
+	
+	List<FixedDepositDetails> findByUserIdAndIsActiveAndBankName(long id, boolean status,String bankName);
 
 }

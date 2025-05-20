@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.company.Personalmgmt.pdf.DepositListPDFGenerator;
 import com.company.Personalmgmt.pdf.ExpensePDFGeneratorV2;
+import com.company.Personalmgmt.service.DepositService;
 import com.company.Personalmgmt.service.InvestmentService;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.geom.PageSize;
@@ -48,6 +49,10 @@ public class InvestmentPDFController {
 	@Autowired
 	InvestmentService investmentService;
 	
+	@Autowired
+	DepositService depositService;
+
+	
 	public static String username = "";
 	
 	private static final float DEFAULT_HEADER_SPACE = 40;
@@ -56,7 +61,7 @@ public class InvestmentPDFController {
 	@ResponseBody
 	public void depositDetailPDF(HttpServletResponse response,@PathVariable String bank) throws DocumentException, IOException {
 	
-		Map<String, Object> depositDetails = investmentService.getDepositDetails("9999", bank);
+		Map<String, Object> depositDetails = depositService.getAllDepositDetails(bank);
 		List<Map<String, Object>> finalResponse = (List<Map<String, Object>>) depositDetails.get("DepositDetails");
 		List<JSONObject> jsonList2 = new ArrayList<>();
 		

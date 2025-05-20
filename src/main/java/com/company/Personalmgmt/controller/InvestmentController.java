@@ -56,7 +56,7 @@ public class InvestmentController {
 	@ResponseBody
 	public Map<String, Object> getKeyNotesDetailsFromId(@RequestParam String year, @RequestParam String bankName) {
 
-		Map<String, Object> depositDetials = investmentService.getDepositDetails(year, bankName);
+		Map<String, Object> depositDetials = depositService.getAllDepositDetails(bankName);
 		
 		System.out.println("depositDetials = "+ depositDetials);
 

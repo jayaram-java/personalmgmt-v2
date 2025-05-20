@@ -92,6 +92,8 @@ public class DepositServiceImpl implements DepositService{
 				String[] maturityDate = maturity.split("-");
 				String sort = maturityDate[2] + maturityDate[1] + maturityDate[0];
 				ob.put("MaturityDateBased", sort);
+				ob.put("MaturityDateObject", depositDetail.getMaturityDate().toLocalDate()); // Store as LocalDate for proper sorting
+
 
 				// Add to totals
 				totalPrincipalAmt.add(depositDetail.getPrincipalAmount().doubleValue());
@@ -120,9 +122,13 @@ public class DepositServiceImpl implements DepositService{
 		return res;
 	}
 
+	public static List<Map<String, Object>> sortBasedOnMaturityDate(List<Map<String, Object>> depositDetails) {
+	    depositDetails.sort(Comparator.comparing(entry -> (LocalDate) entry.get("MaturityDateObject")));
+	    return depositDetails;
+	}
 
 	
-	public static List<Map<String, Object>> sortBasedOnMaturityDate(List<Map<String, Object>> depositDetails) {
+	public static List<Map<String, Object>> sortBasedOnMaturityDate01(List<Map<String, Object>> depositDetails) {
 		Collections.sort(depositDetails, new Comparator<Map<String, Object>>() {
 
 			@Override
@@ -245,6 +251,71 @@ public class DepositServiceImpl implements DepositService{
 			log.info("API | *getDepositDetailsFromId | latency = " + latency + " | output = "+ depositAccountDetailsDto.toString());
 		}
 		return depositAccountDetailsDto;
+	}
+
+
+
+	@Override
+	public Map<String, Object> getAllDepositDetails(String bankName) {
+
+		log.info("API name = *getAllDepositDetails");
+
+		Map<String, Object> res = new HashMap<>();
+		List<Map<String, Object>> response = new ArrayList<>();
+		long userId = (Long) httpsession.getAttribute("userId");
+		List<FixedDepositDetails> depositDetails = fixedDepositRepository.findByUserIdAndIsActiveAndBankName(userId, true,bankName);
+
+		log.info("DEPOSIT RESPONSE = " + depositDetails);
+
+		DoubleAdder totalPrincipalAmt = new DoubleAdder();
+		DoubleAdder totalMaturityAmt = new DoubleAdder();
+
+		LocalDateTime startTime = LocalDateTime.now();
+
+		try {
+			response = depositDetails.stream().map(depositDetail -> {
+				Map<String, Object> ob = new HashMap<>();
+				ob.put("id", depositDetail.getDepositId());
+				ob.put("AccountNumber", depositDetail.getDepositAccountNo());
+				ob.put("BankName", depositDetail.getBankName());
+				ob.put("OpenDate", CommonUtils.convertDateToString(depositDetail.getDepositDate()));
+				ob.put("PrincipalAmt", depositDetail.getPrincipalAmount());
+				ob.put("AccountType", "FD-Term deposit");
+				ob.put("ROI(%)", depositDetail.getFixedInterestRate());
+				ob.put("InterestAmt", depositDetail.getInterestAmount());
+				ob.put("MaturityAmount", depositDetail.getMaturityAmount());
+				ob.put("MaturityDate", CommonUtils.convertDateToString(depositDetail.getMaturityDate()));
+
+				String maturity = CommonUtils.convertDateToString(depositDetail.getMaturityDate());
+				String[] maturityDate = maturity.split("-");
+				String sort = maturityDate[2] + maturityDate[1] + maturityDate[0];
+				ob.put("MaturityDateBased", sort);
+				ob.put("MaturityDateObject", depositDetail.getMaturityDate().toLocalDate()); // Store as LocalDate for proper sorting
+
+				// Add to totals
+				totalPrincipalAmt.add(depositDetail.getPrincipalAmount().doubleValue());
+				totalMaturityAmt.add(depositDetail.getMaturityAmount().doubleValue());
+
+				return ob;
+			}).collect(Collectors.toList());
+
+		} catch (Exception e) {
+			log.error("Exception ", e);
+		} finally {
+			LocalDateTime endTime = LocalDateTime.now();
+			Duration latency = Duration.between(startTime, endTime);
+			log.info("API | *getAllDepositDetails | latency = " + latency);
+		}
+
+		Map<String, Object> summary = new HashMap<>();
+		summary.put("TotalPrincipalAmt", totalPrincipalAmt.doubleValue());
+		summary.put("TotalMaturityAmt", totalMaturityAmt.doubleValue());
+
+		List<Map<String, Object>> finalResponse = sortBasedOnMaturityDate(response);
+
+		res.put("DepositDetails", finalResponse);
+		res.put("Summary", summary);
+		return res;
 	}
 
 

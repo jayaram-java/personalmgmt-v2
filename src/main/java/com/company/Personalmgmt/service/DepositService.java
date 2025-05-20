@@ -16,6 +16,8 @@ import com.company.Personalmgmt.dto.DepositAccountDetailsDto;
 public interface DepositService {
 
 	Map<String, Object> getAllDepositDetails();
+	
+	Map<String, Object> getAllDepositDetails(String bankName);
 
 	boolean saveDepositDetails(DepositAccountDetailsDto depositAccountDetailsDto);
 	
