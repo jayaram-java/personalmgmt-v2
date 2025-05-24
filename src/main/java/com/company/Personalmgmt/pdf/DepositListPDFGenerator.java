@@ -3,21 +3,15 @@
  */
 package com.company.Personalmgmt.pdf;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import org.json.JSONObject;
 
 import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Div;
@@ -125,12 +119,15 @@ public class DepositListPDFGenerator {
 					String cellValue = rowDataMap.optString(row, "");
 					Paragraph cellText = new Paragraph();
 					Paragraph text = new Paragraph(cellValue).setFont(dataFont).setFontSize(10f);
+					if (row.equals("Maturity Date")) {
+						text.setFontColor(ColorConstants.BLUE); // Set font color to blue
+					}
 					cellText.add(text);
 
 					if (row.equals("ROI") && cellValue.equals("Total")) {
 						table.addCell(
 								new Cell().add(cellText).setBackgroundColor(rowColor2).setBorder(Border.NO_BORDER));
-					} else if(row.equals("Category") && cellValue.equals("Total Expenses")) {
+					} else if (row.equals("Category") && cellValue.equals("Total Expenses")) {
 						table.addCell(
 								new Cell().add(cellText).setBackgroundColor(rowColor2).setBorder(Border.NO_BORDER));
 					} else if (rowIndexTable1 % 2 == 0) {
@@ -146,6 +143,5 @@ public class DepositListPDFGenerator {
 			// Handle the exception
 		}
 	}
-
 
 }
