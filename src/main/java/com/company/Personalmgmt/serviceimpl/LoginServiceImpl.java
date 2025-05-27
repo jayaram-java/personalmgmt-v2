@@ -73,12 +73,16 @@ public class LoginServiceImpl implements LoginService {
 	public boolean employeeLoginCheck(String username, String password) {
 		
 		log.info("login checking = "+username + " "+password);
+		
+		System.out.println("login checking = "+username + " "+password);
 
 		try {
 
 			int hashCode = password.hashCode();
 
 			User user = userRepository.findByUsernameAndPassword(username, String.valueOf(hashCode));
+			
+			System.out.println(user);
 
 			if (user == null) {
 				return false;
@@ -121,9 +125,14 @@ public class LoginServiceImpl implements LoginService {
 					httpsession.setAttribute("currentCheckListCategory", checkListCategory.getName());
 
 					httpsession.setAttribute("checkListCategoryId", checkListCategory.getId());
-					
-					httpsession.setAttribute("keyNotesCategoryId", keyNotesCategory.getId());
 
+				}
+				
+				if(keyNotesCategory == null) {
+				
+					httpsession.setAttribute("keyNotesCategoryId", "12");
+				}else {
+					httpsession.setAttribute("keyNotesCategoryId", keyNotesCategory.getId());
 				}
 
 				httpsession.setAttribute("info1", info[0]);
