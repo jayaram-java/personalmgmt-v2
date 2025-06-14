@@ -39,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Long employeeid = (Long) httpsession.getAttribute("tasklist");
 
 		List<EmployeeTaskDetail> employeeTaskDetails = employeeTaskDetailRepository
-				.findByOfficeOrderByIdDesc("Aspire Systems");
+				.findByOfficeOrderByIdDesc("Asp-BankNxt");
 
 		List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
 
@@ -113,7 +113,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				employeeTaskDetail.setEndDate(employeeDto.getEndDate());
 				employeeTaskDetail.setStatus(employeeDto.getStatus());
 				employeeTaskDetail.setTaskCategory(employeeDto.getTaskCategory());
-				employeeTaskDetail.setOffice("Aspire Systems");
+				employeeTaskDetail.setOffice("Asp-BankNxt");
 
 				Optional<User> user = userRepository.findById((long) employeeid);
 
